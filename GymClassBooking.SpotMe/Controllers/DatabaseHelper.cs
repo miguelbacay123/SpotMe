@@ -3,18 +3,23 @@ using System;
 using System.Configuration;
 using System.Windows.Forms;
 
-namespace GymClassBooking.SpotMe
+namespace GymClassBooking.SpotMe.Controllers
 {
     public static class DatabaseHelper
     {
         private static string connectionString =
             ConfigurationManager.ConnectionStrings["SpotMeDB"].ConnectionString;
 
+        public static SqlConnection GetConnection()
+        {
+            return new SqlConnection(connectionString);
+        }
+
         public static bool RegisterUser(string email, string password)
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = GetConnection())
                 {
                     conn.Open();
                     string sql = "INSERT INTO Users (Email, Password, FullName) VALUES (@Email, @Password, @Email)";
@@ -48,7 +53,7 @@ namespace GymClassBooking.SpotMe
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = GetConnection())
                 {
                     conn.Open();
                     string sql = "SELECT COUNT(*) FROM Users WHERE Email = @Email AND Password = @Password";
@@ -67,6 +72,22 @@ namespace GymClassBooking.SpotMe
             {
                 MessageBox.Show("Login error: " + ex.Message, "Error",
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        public static bool TestConnection()
+        {
+            try
+            {
+                using (SqlConnection conn = GetConnection())
+                {
+                    conn.Open();
+                    return true;
+                }
+            }
+            catch
+            {
                 return false;
             }
         }

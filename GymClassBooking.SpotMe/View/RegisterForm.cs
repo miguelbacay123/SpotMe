@@ -1,4 +1,5 @@
 ﻿using System;
+using GymClassBooking.SpotMe.Controllers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -70,31 +71,39 @@ namespace GymClassBooking.SpotMe
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string email = txtEmail.Text.Trim();
-            string password = txtPassword.Text;
-            string confirmPassword = txtConfirmPassword.Text;
-
-            if (password != confirmPassword)
+            try
             {
-                MessageBox.Show("Passwords do not match.", "Error",
-                               MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                string email = txtEmail.Text.Trim();
+                string password = txtPassword.Text;
+                string confirmPassword = txtConfirmPassword.Text;
+
+                if (password != confirmPassword)
+                {
+                    MessageBox.Show("Passwords do not match.", "Error",
+                                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+                {
+                    MessageBox.Show("Please fill all fields.", "Error",
+                                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (DatabaseHelper.RegisterUser(email, password))
+                {
+                    MessageBox.Show("Registration successful! You can now login.",
+                                   "Success",
+                                   MessageBoxButtons.OK,
+                                   MessageBoxIcon.Information);
+                    this.Close();
+                }
             }
-
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            catch (Exception ex)
             {
-                MessageBox.Show("Please fill all fields.", "Error",
-                               MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (DatabaseHelper.RegisterUser(email, password))
-            {
-                MessageBox.Show("Registration successful! You can now login.",
-                               "Success",
-                               MessageBoxButtons.OK,
-                               MessageBoxIcon.Information);
-                this.Close();
+                MessageBox.Show($"Registration Error: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

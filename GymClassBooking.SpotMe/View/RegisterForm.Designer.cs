@@ -38,6 +38,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -49,7 +50,6 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.txtConfirmPassword = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -81,7 +81,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Sitka Subheading", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.DarkSlateBlue;
-            this.label1.Location = new System.Drawing.Point(172, 53);
+            this.label1.Location = new System.Drawing.Point(174, 53);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(111, 39);
             this.label1.TabIndex = 0;
@@ -92,7 +92,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(140, 53);
+            this.pictureBox1.Location = new System.Drawing.Point(142, 53);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(40, 39);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -139,7 +139,7 @@
             // 
             this.pictureBox2.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox2.ErrorImage")));
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(-52, -77);
+            this.pictureBox2.Location = new System.Drawing.Point(-54, -77);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(579, 708);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -159,18 +159,30 @@
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.label6);
-            this.panel2.Location = new System.Drawing.Point(473, -2);
+            this.panel2.Location = new System.Drawing.Point(469, -2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(425, 600);
+            this.panel2.Size = new System.Drawing.Size(431, 600);
             this.panel2.TabIndex = 8;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Cambria", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label3.Location = new System.Drawing.Point(156, 232);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(116, 15);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "Create your account";
+            this.label3.Click += new System.EventHandler(this.label3_Click_1);
             // 
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.White;
             this.panel5.Controls.Add(this.txtPassword);
             this.panel5.Controls.Add(this.label8);
-            this.panel5.Location = new System.Drawing.Point(21, 324);
+            this.panel5.Location = new System.Drawing.Point(24, 324);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(384, 67);
             this.panel5.TabIndex = 10;
@@ -201,7 +213,7 @@
             this.panel3.BackColor = System.Drawing.Color.White;
             this.panel3.Controls.Add(this.txtEmail);
             this.panel3.Controls.Add(this.label5);
-            this.panel3.Location = new System.Drawing.Point(21, 262);
+            this.panel3.Location = new System.Drawing.Point(24, 262);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(384, 67);
             this.panel3.TabIndex = 10;
@@ -233,7 +245,7 @@
             // 
             this.linklogin.AutoSize = true;
             this.linklogin.Font = new System.Drawing.Font("Sitka Small", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linklogin.Location = new System.Drawing.Point(21, 517);
+            this.linklogin.Location = new System.Drawing.Point(24, 517);
             this.linklogin.Name = "linklogin";
             this.linklogin.Size = new System.Drawing.Size(182, 16);
             this.linklogin.TabIndex = 11;
@@ -246,7 +258,7 @@
             this.btnRegister.BackColor = System.Drawing.Color.Black;
             this.btnRegister.Font = new System.Drawing.Font("Sitka Heading", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegister.ForeColor = System.Drawing.Color.White;
-            this.btnRegister.Location = new System.Drawing.Point(21, 459);
+            this.btnRegister.Location = new System.Drawing.Point(24, 459);
             this.btnRegister.Name = "btnRegister";
             this.btnRegister.Size = new System.Drawing.Size(384, 46);
             this.btnRegister.TabIndex = 10;
@@ -259,7 +271,7 @@
             this.panel4.BackColor = System.Drawing.Color.White;
             this.panel4.Controls.Add(this.txtConfirmPassword);
             this.panel4.Controls.Add(this.label7);
-            this.panel4.Location = new System.Drawing.Point(21, 386);
+            this.panel4.Location = new System.Drawing.Point(24, 386);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(384, 67);
             this.panel4.TabIndex = 9;
@@ -287,18 +299,6 @@
             this.label7.Text = "Confirm Password";
             this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Cambria", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label3.Location = new System.Drawing.Point(157, 232);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(116, 15);
-            this.label3.TabIndex = 12;
-            this.label3.Text = "Create your account";
-            this.label3.Click += new System.EventHandler(this.label3_Click_1);
-            // 
             // RegisterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -309,7 +309,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.label2);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "RegisterForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Text = "Form1";
