@@ -180,24 +180,53 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ActivityLogController.cs" />
+    <Compile Include="Controllers\AttendanceController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
-    <Compile Include="Controllers\BookingController.cs" />
+    <Compile Include="Controllers\BookingClassController.cs" />
+    <Compile Include="Controllers\DonationController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
+    <Compile Include="Controllers\StaffController.cs" />
     <Compile Include="Controllers\TrainerController.cs" />
+    <Compile Include="Controls\BulletPointLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\CheckBoxWithText.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\CircularPictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\DropdownButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\HintLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\RoundedButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controllers\DatabaseHelper.cs" />
-    <Compile Include="Models\Booking.cs" />
+    <Compile Include="Controls\SectionHeaderLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SeparatorLine.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SubSectionHeaderLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Data\DatabaseConnection.cs" />
+    <Compile Include="Models\ActivityLog.cs" />
+    <Compile Include="Models\Attendance.cs" />
+    <Compile Include="Models\BookingClass.cs" />
+    <Compile Include="Models\CurrentUser.cs" />
+    <Compile Include="Models\Donation.cs" />
     <Compile Include="Models\Member.cs" />
     <Compile Include="Models\Session.cs" />
+    <Compile Include="Models\SessionBooking.cs" />
+    <Compile Include="Models\Staff.cs" />
     <Compile Include="Models\Trainer.cs" />
     <Compile Include="View\ClassBooking.cs">
       <SubType>Form</SubType>
@@ -210,6 +239,66 @@
     </Compile>
     <Compile Include="View\AddMemberForm.Designer.cs">
       <DependentUpon>AddMemberForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\AddTrainerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\AddTrainerForm.Designer.cs">
+      <DependentUpon>AddTrainerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\BookingClassDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\BookingClassDetailsForm.Designer.cs">
+      <DependentUpon>BookingClassDetailsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\CreateNewBookingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\CreateNewBookingForm.Designer.cs">
+      <DependentUpon>CreateNewBookingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\AddBookingClassForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\AddBookingClassForm.Designer.cs">
+      <DependentUpon>AddBookingClassForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\AddStaffForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\AddStaffForm.Designer.cs">
+      <DependentUpon>AddStaffForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Donations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Donations.Designer.cs">
+      <DependentUpon>Donations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\ManageStaffForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\ManageStaffForm.Designer.cs">
+      <DependentUpon>ManageStaffForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SessionMembersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SessionMembersForm.Designer.cs">
+      <DependentUpon>SessionMembersForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\TrainerDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\TrainerDetailsForm.Designer.cs">
+      <DependentUpon>TrainerDetailsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MemberDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\MemberDetailsForm.Designer.cs">
+      <DependentUpon>MemberDetailsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="View\Sessionschedule.cs">
       <SubType>Form</SubType>
@@ -250,14 +339,38 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="View\AddBookingClassForm.resx">
+      <DependentUpon>AddBookingClassForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\AddMemberForm.resx">
+      <DependentUpon>AddMemberForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\AddTrainerForm.resx">
+      <DependentUpon>AddTrainerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\BookingClassDetailsForm.resx">
+      <DependentUpon>BookingClassDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\ClassBooking.resx">
       <DependentUpon>ClassBooking.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\RoundedButton.resx">
       <DependentUpon>RoundedButton.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="View\CreateNewBookingForm.resx">
+      <DependentUpon>CreateNewBookingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Donations.resx">
+      <DependentUpon>Donations.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\MainDashboard.resx">
       <DependentUpon>MainDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ManageStaffForm.resx">
+      <DependentUpon>ManageStaffForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\MemberDetailsForm.resx">
+      <DependentUpon>MemberDetailsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\MemberManagement..resx">
       <DependentUpon>MemberManagement..cs</DependentUpon>
@@ -277,8 +390,14 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="View\SessionMembersForm.resx">
+      <DependentUpon>SessionMembersForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\Sessionschedule.resx">
       <DependentUpon>Sessionschedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\TrainerDetailsForm.resx">
+      <DependentUpon>TrainerDetailsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\TrainerManagement.resx">
       <DependentUpon>TrainerManagement.cs</DependentUpon>

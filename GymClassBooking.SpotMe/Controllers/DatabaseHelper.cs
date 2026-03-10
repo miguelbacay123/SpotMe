@@ -35,16 +35,21 @@ namespace GymClassBooking.SpotMe.Controllers
             }
             catch (SqlException ex)
             {
-                if (ex.Number == 2627)
+                if (ex.Number == 2627) // Unique constraint violation
                 {
-                    MessageBox.Show("Email already exists.", "Registration Failed",
-                                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false; // Email already exists
                 }
                 else
                 {
                     MessageBox.Show("Database error: " + ex.Message, "Error",
                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -71,6 +76,32 @@ namespace GymClassBooking.SpotMe.Controllers
             catch (Exception ex)
             {
                 MessageBox.Show("Login error: " + ex.Message, "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        public static bool UpdateUserPassword(string email, string newPassword)
+        {
+            try
+            {
+                using (SqlConnection conn = GetConnection())
+                {
+                    conn.Open();
+                    string sql = "UPDATE Users SET Password = @Password WHERE Email = @Email";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Email", email);
+                        cmd.Parameters.AddWithValue("@Password", newPassword);
+
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error updating password: " + ex.Message, "Error",
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }

@@ -10,6 +10,7 @@ namespace GymClassBooking.SpotMe.Models
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Gender { get; set; }
+        public string FitnessGoal { get; set; }    // Add this line
         public Image Photo { get; set; }           // For runtime display
         public string PhotoPath { get; set; }      // For database storage
         public DateTime DateJoined { get; set; }

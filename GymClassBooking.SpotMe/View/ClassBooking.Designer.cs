@@ -1,4 +1,4 @@
-﻿namespace GymClassBooking.SpotMe
+﻿namespace GymClassBooking.SpotMe.View
 {
     partial class ClassBooking
     {
@@ -27,8 +27,16 @@
             this.More = new GymClassBooking.SpotMe.Controls.RoundedButton();
             this.Members = new GymClassBooking.SpotMe.Controls.RoundedButton();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panelContent = new System.Windows.Forms.Panel();
+            this.btnAddClass = new GymClassBooking.SpotMe.Controls.RoundedButton();
+            this.panelHeader = new System.Windows.Forms.Panel();
+            this.lblHeaderTitle = new System.Windows.Forms.Label();
+            this.lblHeaderSubtitle = new System.Windows.Forms.Label();
+            this.panelRowsContainer = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
+            this.panelContent.SuspendLayout();
+            this.panelHeader.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -185,11 +193,82 @@
             this.panel1.Size = new System.Drawing.Size(894, 50);
             this.panel1.TabIndex = 25;
             // 
+            // panelContent
+            // 
+            this.panelContent.BackColor = System.Drawing.Color.White;
+            this.panelContent.Controls.Add(this.btnAddClass);
+            this.panelContent.Controls.Add(this.panelHeader);
+            this.panelContent.Controls.Add(this.panelRowsContainer);
+            this.panelContent.Location = new System.Drawing.Point(12, 70);
+            this.panelContent.Name = "panelContent";
+            this.panelContent.Size = new System.Drawing.Size(860, 480);
+            this.panelContent.TabIndex = 32;
+            // 
+            // btnAddClass
+            // 
+            this.btnAddClass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(44)))), ((int)(((byte)(140)))));
+            this.btnAddClass.BorderRadius = 10;
+            this.btnAddClass.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAddClass.FlatAppearance.BorderSize = 0;
+            this.btnAddClass.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAddClass.Font = new System.Drawing.Font("Sitka Heading", 11F, System.Drawing.FontStyle.Bold);
+            this.btnAddClass.ForeColor = System.Drawing.Color.White;
+            this.btnAddClass.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(80)))), ((int)(((byte)(180)))));
+            this.btnAddClass.Location = new System.Drawing.Point(706, 19);
+            this.btnAddClass.Name = "btnAddClass";
+            this.btnAddClass.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(44)))), ((int)(((byte)(140)))));
+            this.btnAddClass.Size = new System.Drawing.Size(120, 35);
+            this.btnAddClass.TabIndex = 0;
+            this.btnAddClass.Text = "+ Add Class";
+            this.btnAddClass.UseVisualStyleBackColor = false;
+            this.btnAddClass.Click += new System.EventHandler(this.btnAddClass_Click);
+            // 
+            // panelHeader
+            // 
+            this.panelHeader.BackColor = System.Drawing.Color.White;
+            this.panelHeader.Controls.Add(this.lblHeaderTitle);
+            this.panelHeader.Controls.Add(this.lblHeaderSubtitle);
+            this.panelHeader.Location = new System.Drawing.Point(15, 10);
+            this.panelHeader.Name = "panelHeader";
+            this.panelHeader.Size = new System.Drawing.Size(830, 45);
+            this.panelHeader.TabIndex = 1;
+            // 
+            // lblHeaderTitle
+            // 
+            this.lblHeaderTitle.AutoSize = true;
+            this.lblHeaderTitle.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
+            this.lblHeaderTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(44)))), ((int)(((byte)(140)))));
+            this.lblHeaderTitle.Location = new System.Drawing.Point(5, 5);
+            this.lblHeaderTitle.Name = "lblHeaderTitle";
+            this.lblHeaderTitle.Size = new System.Drawing.Size(165, 25);
+            this.lblHeaderTitle.TabIndex = 0;
+            this.lblHeaderTitle.Text = "Training Sessions";
+            // 
+            // lblHeaderSubtitle
+            // 
+            this.lblHeaderSubtitle.AutoSize = true;
+            this.lblHeaderSubtitle.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblHeaderSubtitle.ForeColor = System.Drawing.Color.Gray;
+            this.lblHeaderSubtitle.Location = new System.Drawing.Point(7, 30);
+            this.lblHeaderSubtitle.Name = "lblHeaderSubtitle";
+            this.lblHeaderSubtitle.Size = new System.Drawing.Size(229, 15);
+            this.lblHeaderSubtitle.TabIndex = 1;
+            this.lblHeaderSubtitle.Text = "Manage gym training sessions and classes";
+            // 
+            // panelRowsContainer
+            // 
+            this.panelRowsContainer.AutoScroll = true;
+            this.panelRowsContainer.Location = new System.Drawing.Point(15, 60);
+            this.panelRowsContainer.Name = "panelRowsContainer";
+            this.panelRowsContainer.Size = new System.Drawing.Size(830, 400);
+            this.panelRowsContainer.TabIndex = 2;
+            // 
             // ClassBooking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 561);
+            this.Controls.Add(this.panelContent);
             this.Controls.Add(this.Home);
             this.Controls.Add(this.btnClassBooking);
             this.Controls.Add(this.Trainers);
@@ -203,6 +282,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panelContent.ResumeLayout(false);
+            this.panelHeader.ResumeLayout(false);
+            this.panelHeader.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -218,5 +300,11 @@
         private Controls.RoundedButton More;
         private Controls.RoundedButton Members;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panelContent;
+        private Controls.RoundedButton btnAddClass;
+        private System.Windows.Forms.Panel panelHeader;
+        private System.Windows.Forms.Label lblHeaderTitle;
+        private System.Windows.Forms.Label lblHeaderSubtitle;
+        private System.Windows.Forms.Panel panelRowsContainer;
     }
 }

@@ -13,6 +13,8 @@ namespace GymClassBooking.SpotMe
 {
     public partial class RegisterForm : Form
     {
+        private StaffController _staffController = new StaffController();
+
         public RegisterForm()
         {
             InitializeComponent();
@@ -88,6 +90,16 @@ namespace GymClassBooking.SpotMe
                 {
                     MessageBox.Show("Please fill all fields.", "Error",
                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Check if email already exists in Staff table (from Manage Staff)
+                if (_staffController.StaffExists(email))
+                {
+                    MessageBox.Show("This email is registered as staff and already has an account.",
+                                   "Email Already Registered",
+                                   MessageBoxButtons.OK,
+                                   MessageBoxIcon.Information);
                     return;
                 }
 

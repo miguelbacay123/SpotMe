@@ -104,6 +104,7 @@
             // 
             this.btnAddMember.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(44)))), ((int)(((byte)(140)))));
             this.btnAddMember.BorderRadius = 10;
+            this.btnAddMember.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAddMember.FlatAppearance.BorderSize = 0;
             this.btnAddMember.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddMember.Font = new System.Drawing.Font("Sitka Heading", 11F, System.Drawing.FontStyle.Bold);
@@ -171,11 +172,12 @@
             this.lblHeaderGender.AutoSize = true;
             this.lblHeaderGender.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblHeaderGender.ForeColor = System.Drawing.Color.Black;
-            this.lblHeaderGender.Location = new System.Drawing.Point(394, 8);
+            this.lblHeaderGender.Location = new System.Drawing.Point(411, 8);
             this.lblHeaderGender.Name = "lblHeaderGender";
             this.lblHeaderGender.Size = new System.Drawing.Size(58, 19);
             this.lblHeaderGender.TabIndex = 3;
             this.lblHeaderGender.Text = "Gender";
+            this.lblHeaderGender.Click += new System.EventHandler(this.lblHeaderGender_Click);
             // 
             // lblHeaderPhone
             // 
@@ -212,6 +214,7 @@
             // 
             this.roundedButton7.BackColor = System.Drawing.Color.White;
             this.roundedButton7.BorderRadius = 10;
+            this.roundedButton7.Cursor = System.Windows.Forms.Cursors.Hand;
             this.roundedButton7.FlatAppearance.BorderSize = 0;
             this.roundedButton7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.roundedButton7.Font = new System.Drawing.Font("Sitka Heading", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -230,6 +233,7 @@
             // 
             this.roundedButton6.BackColor = System.Drawing.Color.White;
             this.roundedButton6.BorderRadius = 10;
+            this.roundedButton6.Cursor = System.Windows.Forms.Cursors.Hand;
             this.roundedButton6.FlatAppearance.BorderSize = 0;
             this.roundedButton6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.roundedButton6.Font = new System.Drawing.Font("Sitka Heading", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -249,6 +253,7 @@
             // 
             this.roundedButton5.BackColor = System.Drawing.Color.White;
             this.roundedButton5.BorderRadius = 10;
+            this.roundedButton5.Cursor = System.Windows.Forms.Cursors.Hand;
             this.roundedButton5.FlatAppearance.BorderSize = 0;
             this.roundedButton5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.roundedButton5.Font = new System.Drawing.Font("Sitka Heading", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -268,6 +273,7 @@
             // 
             this.roundedButton4.BackColor = System.Drawing.Color.White;
             this.roundedButton4.BorderRadius = 10;
+            this.roundedButton4.Cursor = System.Windows.Forms.Cursors.Hand;
             this.roundedButton4.FlatAppearance.BorderSize = 0;
             this.roundedButton4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.roundedButton4.Font = new System.Drawing.Font("Sitka Heading", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -307,6 +313,7 @@
             // 
             this.roundedButton1.BackColor = System.Drawing.Color.White;
             this.roundedButton1.BorderRadius = 10;
+            this.roundedButton1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.roundedButton1.FlatAppearance.BorderSize = 0;
             this.roundedButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.roundedButton1.Font = new System.Drawing.Font("Sitka Heading", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

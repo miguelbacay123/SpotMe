@@ -117,11 +117,11 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Sitka Subheading", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.DarkSlateBlue;
-            this.label6.Location = new System.Drawing.Point(162, 195);
+            this.label6.Location = new System.Drawing.Point(146, 195);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(107, 35);
+            this.label6.Size = new System.Drawing.Size(141, 35);
             this.label6.TabIndex = 5;
-            this.label6.Text = "Register";
+            this.label6.Text = "Get Started";
             this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // panel1
@@ -182,7 +182,7 @@
             this.panel5.BackColor = System.Drawing.Color.White;
             this.panel5.Controls.Add(this.txtPassword);
             this.panel5.Controls.Add(this.label8);
-            this.panel5.Location = new System.Drawing.Point(24, 324);
+            this.panel5.Location = new System.Drawing.Point(24, 363);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(384, 67);
             this.panel5.TabIndex = 10;
@@ -190,10 +190,12 @@
             // 
             // txtPassword
             // 
+            this.txtPassword.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPassword.Location = new System.Drawing.Point(6, 27);
             this.txtPassword.Multiline = true;
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
+            this.txtPassword.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtPassword.Size = new System.Drawing.Size(370, 32);
             this.txtPassword.TabIndex = 2;
             // 
@@ -213,7 +215,7 @@
             this.panel3.BackColor = System.Drawing.Color.White;
             this.panel3.Controls.Add(this.txtEmail);
             this.panel3.Controls.Add(this.label5);
-            this.panel3.Location = new System.Drawing.Point(24, 262);
+            this.panel3.Location = new System.Drawing.Point(24, 301);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(384, 67);
             this.panel3.TabIndex = 10;
@@ -221,10 +223,11 @@
             // 
             // txtEmail
             // 
-            this.txtEmail.Font = new System.Drawing.Font("Microsoft Tai Le", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtEmail.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtEmail.Location = new System.Drawing.Point(6, 27);
             this.txtEmail.Multiline = true;
             this.txtEmail.Name = "txtEmail";
+            this.txtEmail.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtEmail.Size = new System.Drawing.Size(370, 32);
             this.txtEmail.TabIndex = 2;
             this.txtEmail.TextChanged += new System.EventHandler(this.textBox1_TextChanged_1);
@@ -244,8 +247,9 @@
             // linklogin
             // 
             this.linklogin.AutoSize = true;
+            this.linklogin.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linklogin.Font = new System.Drawing.Font("Sitka Small", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linklogin.Location = new System.Drawing.Point(24, 517);
+            this.linklogin.Location = new System.Drawing.Point(24, 547);
             this.linklogin.Name = "linklogin";
             this.linklogin.Size = new System.Drawing.Size(182, 16);
             this.linklogin.TabIndex = 11;
@@ -256,9 +260,10 @@
             // btnRegister
             // 
             this.btnRegister.BackColor = System.Drawing.Color.Black;
+            this.btnRegister.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRegister.Font = new System.Drawing.Font("Sitka Heading", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegister.ForeColor = System.Drawing.Color.White;
-            this.btnRegister.Location = new System.Drawing.Point(24, 459);
+            this.btnRegister.Location = new System.Drawing.Point(24, 498);
             this.btnRegister.Name = "btnRegister";
             this.btnRegister.Size = new System.Drawing.Size(384, 46);
             this.btnRegister.TabIndex = 10;
@@ -271,7 +276,7 @@
             this.panel4.BackColor = System.Drawing.Color.White;
             this.panel4.Controls.Add(this.txtConfirmPassword);
             this.panel4.Controls.Add(this.label7);
-            this.panel4.Location = new System.Drawing.Point(24, 386);
+            this.panel4.Location = new System.Drawing.Point(24, 425);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(384, 67);
             this.panel4.TabIndex = 9;
@@ -279,10 +284,12 @@
             // 
             // txtConfirmPassword
             // 
+            this.txtConfirmPassword.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtConfirmPassword.Location = new System.Drawing.Point(6, 27);
             this.txtConfirmPassword.Multiline = true;
             this.txtConfirmPassword.Name = "txtConfirmPassword";
             this.txtConfirmPassword.PasswordChar = '*';
+            this.txtConfirmPassword.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtConfirmPassword.Size = new System.Drawing.Size(370, 32);
             this.txtConfirmPassword.TabIndex = 2;
             this.txtConfirmPassword.TextChanged += new System.EventHandler(this.txtPassword_TextChanged);

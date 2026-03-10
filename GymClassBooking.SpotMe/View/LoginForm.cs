@@ -13,6 +13,16 @@ namespace GymClassBooking.SpotMe
 {
     public partial class LoginForm : Form
     {
+        // Static properties to track logged-in user
+        public static string LoggedInUserEmail { get; set; }
+        public static string LoggedInUserRole { get; set; } // "SuperAdmin", "Admin" or "Member"
+
+        // SuperAdmin emails list (add your email here)
+        private static readonly List<string> SuperAdminEmails = new List<string>
+        {
+            "miguelbacay123@gmail.com"
+        };
+
         public LoginForm()
         {
             try
@@ -42,6 +52,31 @@ namespace GymClassBooking.SpotMe
 
                 if (DatabaseHelper.LoginUser(email, password))
                 {
+                    // Set logged-in user info
+                    LoggedInUserEmail = email;
+
+                    // Check if user is SuperAdmin first
+                    if (SuperAdminEmails.Contains(email))
+                    {
+                        LoggedInUserRole = "SuperAdmin";
+                    }
+                    else
+                    {
+                        // Determine user role (Admin or Member)
+                        // Check if user exists in Staff table using direct method
+                        StaffController staffController = new StaffController();
+                        var staffUser = staffController.GetStaffByEmail(email);
+
+                        if (staffUser != null)
+                        {
+                            LoggedInUserRole = "Admin"; // Staff members are admins
+                        }
+                        else
+                        {
+                            LoggedInUserRole = "Member"; // Regular users are members
+                        }
+                    }
+
                     this.Hide();
 
                     // Create MainDashboard and handle its close event
@@ -53,6 +88,10 @@ namespace GymClassBooking.SpotMe
                         // Clear password field for security
                         txtPassword.Clear();
                         txtEmail.Focus();
+
+                        // Clear logged-in user
+                        LoggedInUserEmail = null;
+                        LoggedInUserRole = null;
                     };
 
                     dashboard.Show(); // Use Show() not ShowDialog()

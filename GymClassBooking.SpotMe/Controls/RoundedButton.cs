@@ -11,6 +11,7 @@ namespace GymClassBooking.SpotMe.Controls
         private int borderRadius = 15;
         private Color normalColor = Color.FromArgb(111, 44, 140);
         private Color hoverColor = Color.FromArgb(150, 80, 180);
+        private ContentAlignment textAlign = ContentAlignment.MiddleCenter;
 
         [Category("Appearance")]
         public int BorderRadius
@@ -44,6 +45,18 @@ namespace GymClassBooking.SpotMe.Controls
             set { hoverColor = value; }
         }
 
+        [Category("Appearance")]
+        public new ContentAlignment TextAlign
+        {
+            get { return textAlign; }
+            set
+            {
+                textAlign = value;
+                base.TextAlign = value; // Use base class property
+                this.Invalidate();
+            }
+        }
+
         private bool isHovered = false;
 
         public RoundedButton()
@@ -54,6 +67,7 @@ namespace GymClassBooking.SpotMe.Controls
             this.ForeColor = Color.White;
             this.Size = new Size(100, 40);
             this.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            this.TextAlign = ContentAlignment.MiddleCenter; // Set base class property
 
             UpdateRegion();
         }
@@ -89,10 +103,8 @@ namespace GymClassBooking.SpotMe.Controls
             base.OnMouseLeave(e);
         }
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-        }
+        // REMOVED the custom OnPaint that was causing bold text issues
+        // Now using base class painting with proper TextAlign
 
         protected override void OnResize(EventArgs e)
         {

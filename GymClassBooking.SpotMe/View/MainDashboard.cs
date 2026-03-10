@@ -8,99 +8,398 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GymClassBooking.SpotMe.View;
+using GymClassBooking.SpotMe.Controllers;
+using GymClassBooking.SpotMe.Models;
 
 namespace GymClassBooking.SpotMe
 {
     public partial class MainDashboard : Form
     {
+        private MemberController memberController = new MemberController();
+        private SessionController sessionController = new SessionController();
+        private TrainerController trainerController = new TrainerController();
+        private ActivityLogController activityLogController = new ActivityLogController();
+        private Timer refreshTimer;
+
+        private const int PRIMARY_HUE = 0x6F2C8C;
+        private const int GRAY_LIGHT = 0xF5F5F5;
+        private const int GRAY_MEDIUM = 0xAAAAAA;
+        private const int GRAY_DARK = 0x666666;
+        private const int BORDER_GRAY = 0xE0E0E0;
+        private const int GRID_GRAY = 0xD0D0D0;
+        private const int BLACK = 0x000000;
+        private const int WHITE = 0xFFFFFF;
+
         public MainDashboard()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (refreshTimer != null)
+            {
+                refreshTimer.Stop();
+                refreshTimer.Dispose();
+            }
+            Environment.Exit(0);
+            base.OnFormClosing(e);
+        }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.Style &= ~0x100000;
+                return cp;
+            }
+        }
+
+        private Color ColorFromHex(int hex)
+        {
+            return Color.FromArgb((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0xFF);
+        }
+
         private void MainDashboard_Load(object sender, EventArgs e)
         {
-            // Your load code here
+            LoadDashboardStatistics();
+            LoadActivityLogs();
+            LoadActivityChart();
+
+            // Auto-refresh disabled to prevent flickering
+            // Uncomment below if you want auto-refresh (30 second interval recommended)
+
+            // refreshTimer = new Timer();
+            // refreshTimer.Interval = 30000; // 30 seconds
+            // refreshTimer.Tick += (s, args) =>
+            // {
+            //     LoadActivityLogs();
+            //     LoadActivityChart();
+            // };
+            // refreshTimer.Start();
         }
 
-        // HOME BUTTON - Refresh current dashboard
-        private void roundedButton1_Click(object sender, EventArgs e)
+        public void RefreshActivityData()
         {
-            this.Refresh();
+            LoadActivityLogs();
+            LoadActivityChart();
         }
 
-        // MEMBERS BUTTON - Open MemberManagement
-        private void roundedButton2_Click(object sender, EventArgs e)
-        {
-            this.Hide(); // Hide MainDashboard
-            MemberManagement memberForm = new MemberManagement();
-            memberForm.Show();
-        }
-
-        // TRAINERS BUTTON - Open TrainerManagement
-        private void roundedButton3_Click(object sender, EventArgs e)
-        {
-            this.Hide(); // Hide MainDashboard
-            TrainerManagement trainerForm = new TrainerManagement();
-            trainerForm.Show();
-        }
-
-        // CLASS BOOKING BUTTON - Open ClassBooking
-        private void roundedButton4_Click(object sender, EventArgs e)
-        {
-            this.Hide(); // Hide MainDashboard
-            ClassBooking bookingForm = new ClassBooking();
-            bookingForm.Show();
-        }
-
-        // SESSION SCHEDULE BUTTON - Open Sessionschedule
-        private void roundedButton5_Click(object sender, EventArgs e)
-        {
-            this.Hide(); // Hide MainDashboard
-            Sessionschedule scheduleForm = new Sessionschedule();
-            scheduleForm.Show();
-        }
-
-        // MORE BUTTON (dropdownButton1) - Shows dropdown menu with Donations, Partnerships, Manage Staff, Logout
-        private void dropdownButton1_Click(object sender, EventArgs e)
+        private void LoadDashboardStatistics()
         {
             try
             {
-                // Create the dropdown menu
-                ContextMenuStrip moreMenu = new ContextMenuStrip();
+                List<Member> allMembers = memberController.GetAllMembers();
+                List<Session> allSessions = sessionController.GetAllSessions();
+                List<Trainer> allTrainers = trainerController.GetAllTrainers();
 
-                // Make it look nice with proper sizing
-                moreMenu.Font = new Font("Segoe UI", 11, FontStyle.Regular);
-                moreMenu.BackColor = Color.White;
-                moreMenu.RenderMode = ToolStripRenderMode.Professional;
-                moreMenu.ShowImageMargin = false;
-
-                // Set width to fit text properly (about 150 pixels wide)
-                moreMenu.Width = 150;
-
-                // Add ONLY the 4 items you want: Donations, Partnerships, Manage Staff, Logout
-                moreMenu.Items.Add("Donations");
-                moreMenu.Items.Add("Partnerships");
-                moreMenu.Items.Add("Manage Staff");
-                moreMenu.Items.Add(new ToolStripSeparator()); // Line before Logout
-                moreMenu.Items.Add("Logout");
-
-                // Add click handlers for each menu item
-                foreach (ToolStripItem item in moreMenu.Items)
+                int upcomingSessions = 0, ongoingSessions = 0, completedSessions = 0;
+                foreach (var session in allSessions)
                 {
-                    if (item is ToolStripMenuItem menuItem)
-                    {
-                        menuItem.Click += MoreMenuItem_Click;
+                    string status = session.GetCurrentStatus();
+                    if (status == "Upcoming") upcomingSessions++;
+                    else if (status == "Ongoing") ongoingSessions++;
+                    else if (status == "Completed") completedSessions++;
+                }
 
-                        // Make each item a bit taller for better fit
-                        menuItem.Height = 35;
+                lblTotalMembersNum.Text = allMembers.Count.ToString();
+                lblActiveMembersNum.Text = allMembers.Count.ToString();
+                lblTrainersNum.Text = allTrainers.Count.ToString();
+                lblUpcomingNum.Text = upcomingSessions.ToString();
+                lblOngoingNum.Text = ongoingSessions.ToString();
+                lblCompletedNum.Text = completedSessions.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+        }
+
+        private void LoadActivityLogs()
+        {
+            try
+            {
+                panelActivityLogs.Controls.Clear();
+
+                var lblTitle = new Label
+                {
+                    Text = "Recent Activity",
+                    Font = new Font("Segoe UI", 13F, FontStyle.Bold),
+                    ForeColor = ColorFromHex(PRIMARY_HUE),
+                    Location = new Point(15, 15),
+                    Size = new Size(300, 25),
+                    AutoSize = false
+                };
+                panelActivityLogs.Controls.Add(lblTitle);
+
+                var lblSubtitle = new Label
+                {
+                    Text = "Latest updates",
+                    Font = new Font("Segoe UI", 9F),
+                    ForeColor = ColorFromHex(GRAY_MEDIUM),
+                    Location = new Point(15, 40),
+                    Size = new Size(300, 20),
+                    AutoSize = false
+                };
+                panelActivityLogs.Controls.Add(lblSubtitle);
+
+                var activities = activityLogController.GetRecentActivities(6);
+                int yPos = 70;
+
+                foreach (var activity in activities)
+                {
+                    Panel panel = new Panel
+                    {
+                        BackColor = ColorFromHex(WHITE),
+                        Location = new Point(10, yPos),
+                        Size = new Size(345, 65),
+                        BorderStyle = BorderStyle.FixedSingle
+                    };
+
+                    panel.Controls.Add(new Label { Text = activity.Icon, Font = new Font("Segoe UI", 16F, FontStyle.Bold), ForeColor = ColorFromHex(PRIMARY_HUE), Location = new Point(10, 8), Size = new Size(30, 50), TextAlign = ContentAlignment.MiddleCenter });
+                    panel.Controls.Add(new Label { Text = activity.Action, Font = new Font("Segoe UI", 10F, FontStyle.Bold), ForeColor = ColorFromHex(BLACK), Location = new Point(50, 8), Size = new Size(250, 18), AutoSize = false });
+                    panel.Controls.Add(new Label { Text = activity.Description, Font = new Font("Segoe UI", 8F), ForeColor = ColorFromHex(GRAY_MEDIUM), Location = new Point(50, 28), Size = new Size(250, 30), AutoSize = false });
+                    panel.Controls.Add(new Label { Text = activity.TimeAgo, Font = new Font("Segoe UI", 8F), ForeColor = ColorFromHex(GRAY_LIGHT), Location = new Point(290, 8), Size = new Size(40, 50), TextAlign = ContentAlignment.TopRight, AutoSize = false });
+
+                    panelActivityLogs.Controls.Add(panel);
+                    yPos += 70;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+        }
+
+        private void LoadActivityChart()
+        {
+            try
+            {
+                panelActivityChart.Controls.Clear();
+
+                panelActivityChart.Controls.Add(new Label
+                {
+                    Text = "Activity - Last 7 Days",
+                    Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                    ForeColor = ColorFromHex(PRIMARY_HUE),
+                    Location = new Point(20, 15),
+                    Size = new Size(300, 25),
+                    AutoSize = false
+                });
+
+                var totalActivities = activityLogController.GetActivityChartData().Values.Sum();
+                panelActivityChart.Controls.Add(new Label
+                {
+                    Text = $"Total: {totalActivities} activities",
+                    Font = new Font("Segoe UI", 9F),
+                    ForeColor = ColorFromHex(GRAY_MEDIUM),
+                    Location = new Point(20, 40),
+                    Size = new Size(300, 20),
+                    AutoSize = false
+                });
+
+                DrawBarChart();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+        }
+
+        private void DrawBarChart()
+        {
+            var rawData = activityLogController.GetActivityChartData(7);
+
+            // Reorder so chart always starts from Saturday through Friday
+            var dayOrder = new[] { "Sat", "Mon", "Tue", "Wed", "Thu", "Fri", "Sun" };
+            var chartData = dayOrder
+                .Where(d => rawData.ContainsKey(d))
+                .ToDictionary(d => d, d => rawData[d]);
+
+            // Add any days not in dayOrder as fallback
+            foreach (var kvp in rawData)
+                if (!chartData.ContainsKey(kvp.Key))
+                    chartData[kvp.Key] = kvp.Value;
+
+            // Always use a fixed scale: 0, 5, 10, 15, 20+
+            const int FIXED_MAX = 20;
+            const int STEP = 5;
+
+            const int Y_AXIS_WIDTH = 50;
+            const int BOTTOM_SPACING = 50;
+            const int TOP_SPACING = 70;
+
+            int chartLeft = Y_AXIS_WIDTH;
+            int chartTop = TOP_SPACING;
+            int chartWidth = panelActivityChart.Width - Y_AXIS_WIDTH - 20;
+            int chartHeight = panelActivityChart.Height - TOP_SPACING - BOTTOM_SPACING - 20;
+
+            int barStartX = chartLeft + 40;
+            int baselineY = chartTop + chartHeight;
+            int barWidth = (chartWidth - 80) / 7;
+
+            // Create Y-axis labels: 0, 5, 10, 15, 20+
+            for (int i = 0; i <= FIXED_MAX; i += STEP)
+            {
+                string labelText = (i == FIXED_MAX) ? "20+" : i.ToString();
+                int labelY = baselineY - (int)(i * chartHeight / (float)FIXED_MAX);
+
+                panelActivityChart.Controls.Add(new Label
+                {
+                    Text = labelText,
+                    Font = new Font("Segoe UI", 9F),
+                    ForeColor = ColorFromHex(GRAY_DARK),
+                    Location = new Point(2, labelY - 10),
+                    Size = new Size(42, 20),
+                    TextAlign = ContentAlignment.MiddleRight,
+                    AutoSize = false
+                });
+            }
+
+            // Paint event: background + horizontal grid lines aligned to Y-axis labels
+            panelActivityChart.Paint -= PanelActivityChart_Paint;
+            panelActivityChart.Paint += (s, e) =>
+            {
+                e.Graphics.Clear(ColorFromHex(GRAY_LIGHT));
+
+                // Draw horizontal grid lines at each step (0, 5, 10, 15, 20)
+                using (Pen gridPen = new Pen(ColorFromHex(GRID_GRAY), 1f))
+                {
+                    for (int i = 0; i <= FIXED_MAX; i += STEP)
+                    {
+                        int gridY = baselineY - (int)(i * chartHeight / (float)FIXED_MAX);
+                        e.Graphics.DrawLine(gridPen, chartLeft, gridY, chartLeft + chartWidth, gridY);
                     }
                 }
 
-                // Show the menu below the MORE button
-                Button moreButton = sender as Button;
-                moreMenu.Show(moreButton, new Point(0, moreButton.Height));
+                // Chart border
+                using (Pen borderPen = new Pen(ColorFromHex(BORDER_GRAY), 1))
+                {
+                    e.Graphics.DrawRectangle(borderPen, chartLeft, chartTop, chartWidth, chartHeight);
+                }
+            };
+
+            // Draw bars
+            int barX = barStartX;
+            foreach (var day in chartData)
+            {
+                // Cap value at FIXED_MAX for bar height, but show real value in label
+                float clampedValue = Math.Min(day.Value, FIXED_MAX);
+                int barHeight = (int)(clampedValue * chartHeight / (float)FIXED_MAX);
+                if (barHeight == 0 && day.Value > 0) barHeight = 1;
+
+                var bar = new Panel
+                {
+                    BackColor = ColorFromHex(PRIMARY_HUE),
+                    Location = new Point(barX, baselineY - barHeight),
+                    Size = new Size(barWidth - 10, barHeight)
+                };
+
+                bar.Paint += (s, e) =>
+                {
+                    using (System.Drawing.Drawing2D.GraphicsPath path = CreateRoundedRectanglePath(bar.ClientRectangle, 4))
+                    {
+                        e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                        e.Graphics.FillPath(new SolidBrush(ColorFromHex(PRIMARY_HUE)), path);
+                    }
+                };
+
+                panelActivityChart.Controls.Add(bar);
+
+                // Value label above bar
+                panelActivityChart.Controls.Add(new Label
+                {
+                    Text = day.Value.ToString(),
+                    Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                    ForeColor = ColorFromHex(PRIMARY_HUE),
+                    Location = new Point(barX - 5, baselineY - barHeight - 25),
+                    Size = new Size(barWidth, 20),
+                    TextAlign = ContentAlignment.BottomCenter,
+                    AutoSize = false
+                });
+
+                // Day label below bar
+                panelActivityChart.Controls.Add(new Label
+                {
+                    Text = day.Key,
+                    Font = new Font("Segoe UI", 9F),
+                    ForeColor = ColorFromHex(GRAY_DARK),
+                    Location = new Point(barX - 5, baselineY + 10),
+                    Size = new Size(barWidth, 18),
+                    TextAlign = ContentAlignment.TopCenter,
+                    AutoSize = false
+                });
+
+                barX += barWidth;
+            }
+
+            panelActivityChart.Invalidate();
+        }
+
+        private void PanelActivityLogs_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.Clear(ColorFromHex(GRAY_LIGHT));
+            var path = CreateRoundedRectanglePath(panelActivityLogs.ClientRectangle, 15);
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            e.Graphics.DrawPath(new Pen(ColorFromHex(BORDER_GRAY), 1), path);
+        }
+
+        private void PanelActivityChart_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.Clear(ColorFromHex(GRAY_LIGHT));
+            var path = CreateRoundedRectanglePath(panelActivityChart.ClientRectangle, 15);
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            e.Graphics.DrawPath(new Pen(ColorFromHex(BORDER_GRAY), 1), path);
+        }
+
+        private System.Drawing.Drawing2D.GraphicsPath CreateRoundedRectanglePath(Rectangle rect, int radius)
+        {
+            var path = new System.Drawing.Drawing2D.GraphicsPath();
+            path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
+            path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90);
+            path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90);
+            path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);
+            path.CloseFigure();
+            return path;
+        }
+
+        private void roundedButton1_Click(object sender, EventArgs e) { LoadDashboardStatistics(); LoadActivityLogs(); LoadActivityChart(); }
+        private void roundedButton2_Click(object sender, EventArgs e) { this.Hide(); new MemberManagement().Show(); }
+        private void roundedButton3_Click(object sender, EventArgs e) { this.Hide(); new TrainerManagement().Show(); }
+        private void roundedButton4_Click(object sender, EventArgs e) { this.Hide(); new ClassBooking().Show(); }
+        private void roundedButton5_Click(object sender, EventArgs e) { this.Hide(); new Sessionschedule().Show(); }
+        private void roundedButton6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ContextMenuStrip moreMenu = new ContextMenuStrip
+                {
+                    Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                    BackColor = ColorFromHex(WHITE),
+                    RenderMode = ToolStripRenderMode.Professional,
+                    ShowImageMargin = true,
+                    ImageScalingSize = new Size(24, 24),
+                    Width = 180,
+                    AutoClose = true
+                };
+                moreMenu.Items.Add("Donations");
+                moreMenu.Items.Add("Partnerships");
+
+                if (LoginForm.LoggedInUserRole == "SuperAdmin")
+                {
+                    moreMenu.Items.Add("Manage Staff");
+                }
+
+                moreMenu.Items.Add(new ToolStripSeparator());
+                moreMenu.Items.Add("Logout");
+
+                foreach (ToolStripItem item in moreMenu.Items)
+                    if (item is ToolStripMenuItem mi) { mi.Click += MoreMenuItem_Click; mi.Height = 35; }
+
+                if (sender is Button btn)
+                    moreMenu.Show(btn, new Point(0, btn.Height));
             }
             catch (Exception ex)
             {
@@ -109,58 +408,35 @@ namespace GymClassBooking.SpotMe
             }
         }
 
-        // Handle clicks on more menu items
         private void MoreMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
-                ToolStripMenuItem clickedItem = sender as ToolStripMenuItem;
-                if (clickedItem != null)
+                if (!(sender is ToolStripMenuItem item)) return;
+                switch (item.Text)
                 {
-                    string option = clickedItem.Text;
+                    case "Donations":
+                        Donations donationsForm = new Donations();
+                        donationsForm.ShowDialog();
+                        break;
 
-                    // Handle each menu item
-                    switch (option)
-                    {
-                        case "Donations":
-                            MessageBox.Show("Donations clicked - Opening Donations form...",
-                                "Donations", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            // TODO: Open Donations form
-                            // DonationsForm donationsForm = new DonationsForm();
-                            // donationsForm.Show();
-                            // this.Hide();
-                            break;
+                    case "Partnerships":
+                        MessageBox.Show("Partnerships form coming soon!",
+                            "Partnerships", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        break;
 
-                        case "Partnerships":
-                            MessageBox.Show("Partnerships clicked - Opening Partnerships form...",
-                                "Partnerships", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            // TODO: Open Partnerships form
-                            // PartnershipsForm partnershipsForm = new PartnershipsForm();
-                            // partnershipsForm.Show();
-                            // this.Hide();
-                            break;
+                    case "Manage Staff":
+                        ManageStaffForm staffForm = new ManageStaffForm();
+                        staffForm.ShowDialog();
+                        break;
 
-                        case "Manage Staff":
-                            MessageBox.Show("Manage Staff clicked - Opening Manage Staff form...",
-                                "Manage Staff", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            // TODO: Open Manage Staff form
-                            // ManageStaffForm staffForm = new ManageStaffForm();
-                            // staffForm.Show();
-                            // this.Hide();
-                            break;
-
-                        case "Logout":
-                            DialogResult result = MessageBox.Show("Are you sure you want to logout?",
-                                "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                            if (result == DialogResult.Yes)
-                            {
-                                this.Hide();
-                                LoginForm loginForm = new LoginForm();
-                                loginForm.Show();
-                            }
-                            break;
-                    }
+                    case "Logout":
+                        if (MessageBox.Show("Are you sure you want to logout?", "Logout",
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            this.Close();
+                        }
+                        break;
                 }
             }
             catch (Exception ex)
@@ -170,21 +446,9 @@ namespace GymClassBooking.SpotMe
             }
         }
 
-        // GET STARTED BUTTON
-        private void btnGetStarted_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Get Started clicked!", "SpotMe",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
+        private void btnGetStarted_Click(object sender, EventArgs e) { this.Hide(); new MemberManagement().Show(); }
+        private void btnExploreMore_Click(object sender, EventArgs e) { this.Hide(); new ClassBooking().Show(); }
 
-        // EXPLORE MORE BUTTON
-        private void btnExploreMore_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Explore More clicked!", "SpotMe",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        // Keep your existing empty methods
         private void pictureBox1_Click(object sender, EventArgs e) { }
         private void label1_Click(object sender, EventArgs e) { }
         private void button1_Click(object sender, EventArgs e) { }
@@ -205,5 +469,8 @@ namespace GymClassBooking.SpotMe
         private void panel2_Paint(object sender, PaintEventArgs e) { }
         private void lblTotalMembersNum_Click(object sender, EventArgs e) { }
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e) { }
+        private void lblUpcomingNum_Click(object sender, EventArgs e) { }
+        private void lblActiveMembersNum_Click(object sender, EventArgs e) { }
+        private void lblTrainersNum_Click(object sender, EventArgs e) { }
     }
 }

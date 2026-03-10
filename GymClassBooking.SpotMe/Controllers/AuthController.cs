@@ -17,17 +17,30 @@ namespace GymClassBooking.SpotMe.Controllers
                 using (SqlConnection conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string sql = "SELECT COUNT(*) FROM Users WHERE Email = @Email AND Password = @Password";
+                    string sql = "SELECT Id, Email, FullName FROM Users WHERE Email = @Email AND Password = @Password";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@Email", email);
                         cmd.Parameters.AddWithValue("@Password", password);
 
-                        int count = (int)cmd.ExecuteScalar();
-                        return count > 0;
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                // Set current user
+                                CurrentUser.User = new User
+                                {
+                                    Id = reader.GetInt32(0),
+                                    Email = reader.GetString(1),
+                                    FullName = reader.GetString(2)
+                                };
+                                return true;
+                            }
+                        }
                     }
                 }
+                return false;
             }
             catch (Exception ex)
             {
@@ -57,7 +70,7 @@ namespace GymClassBooking.SpotMe.Controllers
             }
             catch (SqlException ex)
             {
-                if (ex.Number == 2627) // Unique constraint violation
+                if (ex.Number == 2627)
                 {
                     System.Windows.Forms.MessageBox.Show("Email already exists.", "Registration Failed",
                                    System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
