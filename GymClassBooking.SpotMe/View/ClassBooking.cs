@@ -524,8 +524,8 @@ namespace GymClassBooking.SpotMe.View
                     }
                 }
 
-                Button moreButton = sender as Button;
-                moreMenu.Show(moreButton, new Point(0, moreButton.Height));
+                if (sender is Button moreButton)
+                    moreMenu.Show(moreButton, new Point(0, moreButton.Height));
             }
             catch (Exception ex)
             {

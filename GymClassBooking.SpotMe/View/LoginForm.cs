@@ -17,11 +17,20 @@ namespace GymClassBooking.SpotMe
         public static string LoggedInUserEmail { get; set; }
         public static string LoggedInUserRole { get; set; } // "SuperAdmin", "Staff" or "Member"
 
-        // SuperAdmin emails list (add your email here)
+        // SuperAdmin emails list
         private static readonly List<string> SuperAdminEmails = new List<string>
         {
             "miguelbacay123@gmail.com"
         };
+
+        // Color Palette
+        private const int PRIMARY_HUE = 0x6F2C8C;      // Purple (111, 44, 140)
+        private const int LIGHT_PURPLE = 0xF9F5FF;     // Light purple tint
+        private const int GRAY_LIGHT = 0xF5F5F5;       // Light gray background
+        private const int GRAY_DARK = 0x666666;        // Dark gray text
+        private const int BLACK = 0x000000;            // Black text
+        private const int WHITE = 0xFFFFFF;            // White background
+        private const int SNOW = 0xFFFAFA;             // Snow color
 
         public LoginForm()
         {
@@ -29,6 +38,7 @@ namespace GymClassBooking.SpotMe
             {
                 InitializeComponent();
                 this.StartPosition = FormStartPosition.CenterScreen;
+                ApplyColorPalette();
             }
             catch (Exception ex)
             {
@@ -37,12 +47,60 @@ namespace GymClassBooking.SpotMe
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private Color ColorFromHex(int hex)
         {
-
+            return Color.FromArgb((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0xFF);
         }
 
-        // LOGIN BUTTON - FIXED VERSION
+        private void ApplyColorPalette()
+        {
+            // Main form background
+            this.BackColor = ColorFromHex(WHITE);
+
+            // Left panel (image panel)
+            panel1.BackColor = ColorFromHex(LIGHT_PURPLE);
+
+            // Right panel (form content)
+            panel2.BackColor = ColorFromHex(WHITE);
+
+            // Title and branding
+            label1.ForeColor = ColorFromHex(PRIMARY_HUE);
+            label6.ForeColor = ColorFromHex(PRIMARY_HUE);
+
+            // Subtitle text
+            label3.ForeColor = ColorFromHex(GRAY_DARK);
+            label4.ForeColor = ColorFromHex(GRAY_DARK);
+
+            // Input panels
+            panel3.BackColor = ColorFromHex(GRAY_LIGHT);
+            panel4.BackColor = ColorFromHex(GRAY_LIGHT);
+
+            // Input labels
+            label5.ForeColor = ColorFromHex(GRAY_DARK);
+            label7.ForeColor = ColorFromHex(GRAY_DARK);
+
+            // Input text boxes
+            txtEmail.BackColor = ColorFromHex(WHITE);
+            txtEmail.ForeColor = ColorFromHex(BLACK);
+            txtPassword.BackColor = ColorFromHex(WHITE);
+            txtPassword.ForeColor = ColorFromHex(BLACK);
+
+            // Login button
+            btnLogin.BackColor = ColorFromHex(PRIMARY_HUE);
+            btnLogin.ForeColor = ColorFromHex(WHITE);
+            btnLogin.Cursor = Cursors.Hand;
+
+            // Register link
+            linkRegister.LinkColor = ColorFromHex(PRIMARY_HUE);
+            linkRegister.VisitedLinkColor = ColorFromHex(PRIMARY_HUE);
+            linkRegister.ActiveLinkColor = ColorFromHex(GRAY_DARK);
+            linkRegister.Cursor = Cursors.Hand;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             try
@@ -65,7 +123,6 @@ namespace GymClassBooking.SpotMe
                     else
                     {
                         // Determine user role (Staff or Member)
-                        // Check if user exists in Staff table using direct method
                         StaffController staffController = new StaffController();
                         var staffUser = staffController.GetStaffByEmail(email);
 
@@ -101,7 +158,7 @@ namespace GymClassBooking.SpotMe
                         CurrentUser.Logout();
                     };
 
-                    dashboard.Show(); // Use Show() not ShowDialog()
+                    dashboard.Show();
                 }
                 else
                 {
@@ -121,7 +178,6 @@ namespace GymClassBooking.SpotMe
             }
         }
 
-        // Register link - FIXED VERSION
         private void linkRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
@@ -143,7 +199,7 @@ namespace GymClassBooking.SpotMe
             }
         }
 
-        // All your existing empty event handlers
+        // Empty event handlers
         private void label1_Click(object sender, EventArgs e) { }
         private void panel1_Paint(object sender, PaintEventArgs e) { }
         private void label4_Click(object sender, EventArgs e) { }

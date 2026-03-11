@@ -273,25 +273,22 @@ namespace GymClassBooking.SpotMe.View
             cardPanel.Controls.Add(lblCapacity);
             currentY += 30;
 
-            // View Members Button - Only for SuperAdmin and Staff
-            if (CurrentUser.IsSuperAdmin() || CurrentUser.IsStaff())
-            {
-                Button btnViewMembers = new Button();
-                btnViewMembers.Text = "👥 View Members";
-                btnViewMembers.Font = new Font("Segoe UI", 9, FontStyle.Bold);
-                btnViewMembers.ForeColor = ColorFromHex(PRIMARY_HUE);
-                btnViewMembers.BackColor = ColorFromHex(WHITE);
-                btnViewMembers.FlatStyle = FlatStyle.Flat;
-                btnViewMembers.FlatAppearance.BorderColor = ColorFromHex(PRIMARY_HUE);
-                btnViewMembers.FlatAppearance.BorderSize = 1;
-                btnViewMembers.Location = new Point(leftMargin, currentY);
-                btnViewMembers.Size = new Size(contentWidth, 28);
-                btnViewMembers.Tag = session;
-                btnViewMembers.Cursor = Cursors.Hand;
-                btnViewMembers.Click += BtnViewMembers_Click;
-                cardPanel.Controls.Add(btnViewMembers);
-                currentY += 33;
-            }
+            // View Members Button - Visible for all roles (Members see read-only list)
+            Button btnViewMembers = new Button();
+            btnViewMembers.Text = "👥 View Members";
+            btnViewMembers.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            btnViewMembers.ForeColor = ColorFromHex(PRIMARY_HUE);
+            btnViewMembers.BackColor = ColorFromHex(WHITE);
+            btnViewMembers.FlatStyle = FlatStyle.Flat;
+            btnViewMembers.FlatAppearance.BorderColor = ColorFromHex(PRIMARY_HUE);
+            btnViewMembers.FlatAppearance.BorderSize = 1;
+            btnViewMembers.Location = new Point(leftMargin, currentY);
+            btnViewMembers.Size = new Size(contentWidth, 28);
+            btnViewMembers.Tag = session;
+            btnViewMembers.Cursor = Cursors.Hand;
+            btnViewMembers.Click += BtnViewMembers_Click;
+            cardPanel.Controls.Add(btnViewMembers);
+            currentY += 33;
 
             cardPanel.Size = new Size(width, currentY + 15);
 
@@ -387,8 +384,8 @@ namespace GymClassBooking.SpotMe.View
                     }
                 }
 
-                Button moreButton = sender as Button;
-                moreMenu.Show(moreButton, new Point(0, moreButton.Height));
+                if (sender is Button moreButton)
+                    moreMenu.Show(moreButton, new Point(0, moreButton.Height));
             }
             catch (Exception ex)
             {

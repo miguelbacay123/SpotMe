@@ -109,12 +109,6 @@ namespace GymClassBooking.SpotMe.View
         {
             members = memberController.GetAllMembers();
 
-            // If user is Member, only show their own account
-            if (CurrentUser.IsMember())
-            {
-                members = members.Where(m => m.Email == CurrentUser.UserEmail).ToList();
-            }
-
             currentPage = 1;
             totalPages = (int)Math.Ceiling((double)members.Count / ITEMS_PER_PAGE);
             RefreshMemberDisplay();
