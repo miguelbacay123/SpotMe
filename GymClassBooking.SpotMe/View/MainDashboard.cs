@@ -67,18 +67,6 @@ namespace GymClassBooking.SpotMe
             LoadDashboardStatistics();
             LoadActivityLogs();
             LoadActivityChart();
-
-            // Auto-refresh disabled to prevent flickering
-            // Uncomment below if you want auto-refresh (30 second interval recommended)
-
-            // refreshTimer = new Timer();
-            // refreshTimer.Interval = 30000; // 30 seconds
-            // refreshTimer.Tick += (s, args) =>
-            // {
-            //     LoadActivityLogs();
-            //     LoadActivityChart();
-            // };
-            // refreshTimer.Start();
         }
 
         public void RefreshActivityData()
@@ -212,21 +200,17 @@ namespace GymClassBooking.SpotMe
         {
             var rawData = activityLogController.GetActivityChartData(7);
 
-            // Reorder so chart always starts from Saturday through Friday
             var dayOrder = new[] { "Sat", "Mon", "Tue", "Wed", "Thu", "Fri", "Sun" };
             var chartData = dayOrder
                 .Where(d => rawData.ContainsKey(d))
                 .ToDictionary(d => d, d => rawData[d]);
 
-            // Add any days not in dayOrder as fallback
             foreach (var kvp in rawData)
                 if (!chartData.ContainsKey(kvp.Key))
                     chartData[kvp.Key] = kvp.Value;
 
-            // Always use a fixed scale: 0, 5, 10, 15, 20+
             const int FIXED_MAX = 20;
             const int STEP = 5;
-
             const int Y_AXIS_WIDTH = 50;
             const int BOTTOM_SPACING = 50;
             const int TOP_SPACING = 70;
@@ -240,7 +224,6 @@ namespace GymClassBooking.SpotMe
             int baselineY = chartTop + chartHeight;
             int barWidth = (chartWidth - 80) / 7;
 
-            // Create Y-axis labels: 0, 5, 10, 15, 20+
             for (int i = 0; i <= FIXED_MAX; i += STEP)
             {
                 string labelText = (i == FIXED_MAX) ? "20+" : i.ToString();
@@ -258,13 +241,11 @@ namespace GymClassBooking.SpotMe
                 });
             }
 
-            // Paint event: background + horizontal grid lines aligned to Y-axis labels
             panelActivityChart.Paint -= PanelActivityChart_Paint;
             panelActivityChart.Paint += (s, e) =>
             {
                 e.Graphics.Clear(ColorFromHex(GRAY_LIGHT));
 
-                // Draw horizontal grid lines at each step (0, 5, 10, 15, 20)
                 using (Pen gridPen = new Pen(ColorFromHex(GRID_GRAY), 1f))
                 {
                     for (int i = 0; i <= FIXED_MAX; i += STEP)
@@ -274,18 +255,15 @@ namespace GymClassBooking.SpotMe
                     }
                 }
 
-                // Chart border
                 using (Pen borderPen = new Pen(ColorFromHex(BORDER_GRAY), 1))
                 {
                     e.Graphics.DrawRectangle(borderPen, chartLeft, chartTop, chartWidth, chartHeight);
                 }
             };
 
-            // Draw bars
             int barX = barStartX;
             foreach (var day in chartData)
             {
-                // Cap value at FIXED_MAX for bar height, but show real value in label
                 float clampedValue = Math.Min(day.Value, FIXED_MAX);
                 int barHeight = (int)(clampedValue * chartHeight / (float)FIXED_MAX);
                 if (barHeight == 0 && day.Value > 0) barHeight = 1;
@@ -308,7 +286,6 @@ namespace GymClassBooking.SpotMe
 
                 panelActivityChart.Controls.Add(bar);
 
-                // Value label above bar
                 panelActivityChart.Controls.Add(new Label
                 {
                     Text = day.Value.ToString(),
@@ -320,7 +297,6 @@ namespace GymClassBooking.SpotMe
                     AutoSize = false
                 });
 
-                // Day label below bar
                 panelActivityChart.Controls.Add(new Label
                 {
                     Text = day.Key,
@@ -403,8 +379,7 @@ namespace GymClassBooking.SpotMe
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error showing dropdown: {ex.Message}",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error showing dropdown: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -421,8 +396,8 @@ namespace GymClassBooking.SpotMe
                         break;
 
                     case "Partnerships":
-                        MessageBox.Show("Partnerships form coming soon!",
-                            "Partnerships", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        PartnershipsForm partnershipsForm = new PartnershipsForm();
+                        partnershipsForm.ShowDialog();
                         break;
 
                     case "Manage Staff":
@@ -441,8 +416,7 @@ namespace GymClassBooking.SpotMe
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error handling menu click: {ex.Message}",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error handling menu click: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

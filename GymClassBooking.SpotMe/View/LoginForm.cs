@@ -15,7 +15,7 @@ namespace GymClassBooking.SpotMe
     {
         // Static properties to track logged-in user
         public static string LoggedInUserEmail { get; set; }
-        public static string LoggedInUserRole { get; set; } // "SuperAdmin", "Admin" or "Member"
+        public static string LoggedInUserRole { get; set; } // "SuperAdmin", "Staff" or "Member"
 
         // SuperAdmin emails list (add your email here)
         private static readonly List<string> SuperAdminEmails = new List<string>
@@ -54,26 +54,30 @@ namespace GymClassBooking.SpotMe
                 {
                     // Set logged-in user info
                     LoggedInUserEmail = email;
+                    CurrentUser.UserEmail = email;
 
                     // Check if user is SuperAdmin first
                     if (SuperAdminEmails.Contains(email))
                     {
                         LoggedInUserRole = "SuperAdmin";
+                        CurrentUser.UserRole = "SuperAdmin";
                     }
                     else
                     {
-                        // Determine user role (Admin or Member)
+                        // Determine user role (Staff or Member)
                         // Check if user exists in Staff table using direct method
                         StaffController staffController = new StaffController();
                         var staffUser = staffController.GetStaffByEmail(email);
 
                         if (staffUser != null)
                         {
-                            LoggedInUserRole = "Admin"; // Staff members are admins
+                            LoggedInUserRole = "Staff";
+                            CurrentUser.UserRole = "Staff";
                         }
                         else
                         {
-                            LoggedInUserRole = "Member"; // Regular users are members
+                            LoggedInUserRole = "Member";
+                            CurrentUser.UserRole = "Member";
                         }
                     }
 
@@ -92,6 +96,9 @@ namespace GymClassBooking.SpotMe
                         // Clear logged-in user
                         LoggedInUserEmail = null;
                         LoggedInUserRole = null;
+                        CurrentUser.UserEmail = null;
+                        CurrentUser.UserRole = null;
+                        CurrentUser.Logout();
                     };
 
                     dashboard.Show(); // Use Show() not ShowDialog()

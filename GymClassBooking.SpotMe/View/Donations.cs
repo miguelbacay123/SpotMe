@@ -64,11 +64,15 @@ namespace GymClassBooking.SpotMe.View
             // Progress bar background
             panelProgressBar.BackColor = ColorFromHex(GRAY_LIGHT);
 
-            // Edit button
-            btnEdit.BackColor = ColorFromHex(PRIMARY_HUE);
-            btnEdit.ForeColor = ColorFromHex(WHITE);
-            btnEdit.FlatAppearance.BorderColor = ColorFromHex(PRIMARY_HUE);
-            btnEdit.Cursor = Cursors.Hand;
+            // Edit button - Only visible for SuperAdmin and Staff
+            btnEdit.Visible = CurrentUser.IsSuperAdmin() || CurrentUser.IsStaff();
+            if (btnEdit.Visible)
+            {
+                btnEdit.BackColor = ColorFromHex(PRIMARY_HUE);
+                btnEdit.ForeColor = ColorFromHex(WHITE);
+                btnEdit.FlatAppearance.BorderColor = ColorFromHex(PRIMARY_HUE);
+                btnEdit.Cursor = Cursors.Hand;
+            }
         }
 
         private void LoadDonation()
@@ -110,6 +114,14 @@ namespace GymClassBooking.SpotMe.View
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            // Check permission
+            if (!CurrentUser.CanEditDonations())
+            {
+                MessageBox.Show("You don't have permission to edit donations.",
+                    "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (currentDonation == null) return;
 
             Form editForm = new Form

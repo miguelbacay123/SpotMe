@@ -88,10 +88,14 @@ namespace GymClassBooking.SpotMe.View
                 lbl.BackColor = ColorFromHex(GRAY_LIGHT);
             }
 
-            // Add button
-            btnAddTrainer.NormalColor = ColorFromHex(PRIMARY_HUE);
-            btnAddTrainer.HoverColor = ColorFromHex(0x9B6BA6);
-            btnAddTrainer.ForeColor = ColorFromHex(WHITE);
+            // Add button - Only visible for SuperAdmin and Staff
+            btnAddTrainer.Visible = CurrentUser.IsSuperAdmin() || CurrentUser.IsStaff();
+            if (btnAddTrainer.Visible)
+            {
+                btnAddTrainer.NormalColor = ColorFromHex(PRIMARY_HUE);
+                btnAddTrainer.HoverColor = ColorFromHex(0x9B6BA6);
+                btnAddTrainer.ForeColor = ColorFromHex(WHITE);
+            }
 
             // Navigation buttons
             foreach (RoundedButton btn in new[] { roundedButton1, roundedButton3, roundedButton4, roundedButton5, roundedButton6, roundedButton7 })
@@ -119,7 +123,7 @@ namespace GymClassBooking.SpotMe.View
             {
                 panelRowsContainer.Controls.Add(new Label
                 {
-                    Text = "No trainers found. Click '+ Add Trainer' to create one.",
+                    Text = "No trainers found.",
                     Font = new Font("Segoe UI", 11, FontStyle.Italic),
                     ForeColor = ColorFromHex(GRAY_MEDIUM),
                     Location = new Point(COL_NAME, 15),
@@ -199,23 +203,27 @@ namespace GymClassBooking.SpotMe.View
                 ? string.Join(", ", trainer.Specializations) : "Not specified";
             row.Controls.Add(Cell(specs, COL_SPECIALTIES, W_SPECIALTIES));
 
-            Button btnAction = new Button
+            // Only show action button for SuperAdmin and Staff
+            if (CurrentUser.IsSuperAdmin() || CurrentUser.IsStaff())
             {
-                Text = "⋮",
-                Font = new Font("Segoe UI", 12, FontStyle.Bold),
-                ForeColor = ColorFromHex(PRIMARY_HUE),
-                BackColor = ColorFromHex(WHITE),
-                FlatStyle = FlatStyle.Flat,
-                Location = new Point(COL_ACTION, (ROW_H - 30) / 2),
-                Size = new Size(W_ACTION, 30),
-                TextAlign = ContentAlignment.MiddleCenter,
-                Tag = trainer,
-                Cursor = Cursors.Hand
-            };
-            btnAction.FlatAppearance.BorderSize = 1;
-            btnAction.FlatAppearance.BorderColor = ColorFromHex(BORDER_GRAY);
-            btnAction.Click += BtnAction_Click;
-            row.Controls.Add(btnAction);
+                Button btnAction = new Button
+                {
+                    Text = "⋮",
+                    Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                    ForeColor = ColorFromHex(PRIMARY_HUE),
+                    BackColor = ColorFromHex(WHITE),
+                    FlatStyle = FlatStyle.Flat,
+                    Location = new Point(COL_ACTION, (ROW_H - 30) / 2),
+                    Size = new Size(W_ACTION, 30),
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Tag = trainer,
+                    Cursor = Cursors.Hand
+                };
+                btnAction.FlatAppearance.BorderSize = 1;
+                btnAction.FlatAppearance.BorderColor = ColorFromHex(BORDER_GRAY);
+                btnAction.Click += BtnAction_Click;
+                row.Controls.Add(btnAction);
+            }
 
             panelRowsContainer.Controls.Add(row);
         }
@@ -457,7 +465,7 @@ namespace GymClassBooking.SpotMe.View
                 moreMenu.Items.Add("Donations");
                 moreMenu.Items.Add("Partnerships");
 
-                if (LoginForm.LoggedInUserRole == "SuperAdmin")
+                if (CurrentUser.IsSuperAdmin())
                 {
                     moreMenu.Items.Add("Manage Staff");
                 }
@@ -491,19 +499,28 @@ namespace GymClassBooking.SpotMe.View
                         break;
 
                     case "Partnerships":
-                        MessageBox.Show("Partnerships form coming soon!",
-                            "Partnerships", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        PartnershipsForm partnershipsForm = new PartnershipsForm();
+                        partnershipsForm.ShowDialog();
                         break;
 
                     case "Manage Staff":
-                        ManageStaffForm staffForm = new ManageStaffForm();
-                        staffForm.ShowDialog();
+                        if (CurrentUser.IsSuperAdmin())
+                        {
+                            ManageStaffForm staffForm = new ManageStaffForm();
+                            staffForm.ShowDialog();
+                        }
+                        else
+                        {
+                            MessageBox.Show("You don't have permission to access this feature.",
+                                "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
                         break;
 
                     case "Logout":
                         if (MessageBox.Show("Are you sure you want to logout?", "Logout",
                                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
+                            CurrentUser.Logout();
                             this.Close();
                         }
                         break;

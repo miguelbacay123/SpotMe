@@ -87,10 +87,14 @@ namespace GymClassBooking.SpotMe.View
                 lbl.BackColor = ColorFromHex(GRAY_LIGHT);
             }
 
-            // Add button
-            btnAddMember.NormalColor = ColorFromHex(PRIMARY_HUE);
-            btnAddMember.HoverColor = ColorFromHex(0x9B6BA6);
-            btnAddMember.ForeColor = ColorFromHex(WHITE);
+            // Add button - Only visible for SuperAdmin and Staff
+            btnAddMember.Visible = CurrentUser.IsSuperAdmin() || CurrentUser.IsStaff();
+            if (btnAddMember.Visible)
+            {
+                btnAddMember.NormalColor = ColorFromHex(PRIMARY_HUE);
+                btnAddMember.HoverColor = ColorFromHex(0x9B6BA6);
+                btnAddMember.ForeColor = ColorFromHex(WHITE);
+            }
 
             // Navigation buttons
             foreach (RoundedButton btn in new[] { roundedButton1, roundedButton3, roundedButton4, roundedButton5, roundedButton6, roundedButton7 })
@@ -104,6 +108,13 @@ namespace GymClassBooking.SpotMe.View
         private void LoadMembers()
         {
             members = memberController.GetAllMembers();
+
+            // If user is Member, only show their own account
+            if (CurrentUser.IsMember())
+            {
+                members = members.Where(m => m.Email == CurrentUser.UserEmail).ToList();
+            }
+
             currentPage = 1;
             totalPages = (int)Math.Ceiling((double)members.Count / ITEMS_PER_PAGE);
             RefreshMemberDisplay();
@@ -299,15 +310,37 @@ namespace GymClassBooking.SpotMe.View
         {
             if (!(sender is Button btn) || !(btn.Tag is Member member)) return;
 
+            // Check if user is Member and trying to access other member's account
+            bool isOwnAccount = CurrentUser.UserEmail == member.Email;
+            bool isMember = CurrentUser.IsMember();
+
             ContextMenuStrip menu = new ContextMenuStrip
             {
                 Font = new Font("Segoe UI", 10, FontStyle.Regular),
                 BackColor = ColorFromHex(WHITE),
                 ForeColor = ColorFromHex(GRAY_DARK)
             };
-            menu.Items.Add("✏️ Edit");
-            menu.Items.Add("🗑️ Delete");
-            menu.Items.Add("👁️ View Details");
+
+            // For Members: Only show View Details for own account
+            if (isMember && !isOwnAccount)
+            {
+                menu.Items.Add("(No actions available)");
+                menu.Show(btn, new Point(0, btn.Height));
+                return;
+            }
+
+            // For Members: View Details only (no edit/delete)
+            if (isMember && isOwnAccount)
+            {
+                menu.Items.Add("👁️ View Details");
+            }
+            else
+            {
+                // For Staff/SuperAdmin: Full access
+                menu.Items.Add("✏️ Edit");
+                menu.Items.Add("🗑️ Delete");
+                menu.Items.Add("👁️ View Details");
+            }
 
             menu.ItemClicked += (s, args) =>
             {
@@ -450,7 +483,7 @@ namespace GymClassBooking.SpotMe.View
                 moreMenu.Items.Add("Donations");
                 moreMenu.Items.Add("Partnerships");
 
-                if (LoginForm.LoggedInUserRole == "SuperAdmin")
+                if (CurrentUser.IsSuperAdmin())
                 {
                     moreMenu.Items.Add("Manage Staff");
                 }
@@ -484,19 +517,28 @@ namespace GymClassBooking.SpotMe.View
                         break;
 
                     case "Partnerships":
-                        MessageBox.Show("Partnerships form coming soon!",
-                            "Partnerships", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        PartnershipsForm partnershipsForm = new PartnershipsForm();
+                        partnershipsForm.ShowDialog();
                         break;
 
                     case "Manage Staff":
-                        ManageStaffForm staffForm = new ManageStaffForm();
-                        staffForm.ShowDialog();
+                        if (CurrentUser.IsSuperAdmin())
+                        {
+                            ManageStaffForm staffForm = new ManageStaffForm();
+                            staffForm.ShowDialog();
+                        }
+                        else
+                        {
+                            MessageBox.Show("You don't have permission to access this feature.",
+                                "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
                         break;
 
                     case "Logout":
                         if (MessageBox.Show("Are you sure you want to logout?", "Logout",
                                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
+                            CurrentUser.Logout();
                             this.Close();
                         }
                         break;

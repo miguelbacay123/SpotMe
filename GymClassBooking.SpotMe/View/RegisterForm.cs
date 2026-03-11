@@ -105,6 +105,10 @@ namespace GymClassBooking.SpotMe
 
                 if (DatabaseHelper.RegisterUser(email, password))
                 {
+                    // Set CurrentUser for new member
+                    CurrentUser.UserEmail = email;
+                    CurrentUser.UserRole = "Member";
+
                     MessageBox.Show("Registration successful! You can now login.",
                                    "Success",
                                    MessageBoxButtons.OK,

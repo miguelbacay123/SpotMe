@@ -47,9 +47,14 @@ namespace GymClassBooking.SpotMe.View
             lblTitle.ForeColor = ColorFromHex(WHITE);
             lblSubtitle.ForeColor = ColorFromHex(WHITE);
 
-            btnNewBooking.BackColor = ColorFromHex(WHITE);
-            btnNewBooking.ForeColor = ColorFromHex(PRIMARY_HUE);
-            btnNewBooking.Cursor = Cursors.Hand;
+            // Hide "New Booking" button for Members
+            btnNewBooking.Visible = CurrentUser.IsSuperAdmin() || CurrentUser.IsStaff();
+            if (btnNewBooking.Visible)
+            {
+                btnNewBooking.BackColor = ColorFromHex(WHITE);
+                btnNewBooking.ForeColor = ColorFromHex(PRIMARY_HUE);
+                btnNewBooking.Cursor = Cursors.Hand;
+            }
 
             pnlTableHeader.BackColor = ColorFromHex(GRAY_LIGHT);
             foreach (Label lbl in pnlTableHeader.Controls.OfType<Label>())
@@ -152,36 +157,42 @@ namespace GymClassBooking.SpotMe.View
                 lblStatus.AutoSize = false;
                 rowPanel.Controls.Add(lblStatus);
 
-                // Mark Present Button
-                Button btnMarkPresent = new Button();
-                btnMarkPresent.Text = isMarkedPresent ? "Marked" : "Mark Present";
-                btnMarkPresent.Font = new Font("Segoe UI", 8, FontStyle.Bold);
-                btnMarkPresent.ForeColor = ColorFromHex(WHITE);
-                btnMarkPresent.BackColor = isMarkedPresent ? ColorFromHex(GRAY_DARK) : ColorFromHex(GREEN_SUCCESS);
-                btnMarkPresent.FlatStyle = FlatStyle.Flat;
-                btnMarkPresent.FlatAppearance.BorderSize = 0;
-                btnMarkPresent.Location = new Point(677, 8);
-                btnMarkPresent.Size = new Size(85, 28);
-                btnMarkPresent.Tag = booking;
-                btnMarkPresent.Cursor = Cursors.Hand;
-                btnMarkPresent.Enabled = !isMarkedPresent;
-                btnMarkPresent.Click += (s, e) => MarkPresent(booking);
-                rowPanel.Controls.Add(btnMarkPresent);
+                // Mark Present Button - Only for SuperAdmin and Staff
+                if (CurrentUser.IsSuperAdmin() || CurrentUser.IsStaff())
+                {
+                    Button btnMarkPresent = new Button();
+                    btnMarkPresent.Text = isMarkedPresent ? "Marked" : "Mark Present";
+                    btnMarkPresent.Font = new Font("Segoe UI", 8, FontStyle.Bold);
+                    btnMarkPresent.ForeColor = ColorFromHex(WHITE);
+                    btnMarkPresent.BackColor = isMarkedPresent ? ColorFromHex(GRAY_DARK) : ColorFromHex(GREEN_SUCCESS);
+                    btnMarkPresent.FlatStyle = FlatStyle.Flat;
+                    btnMarkPresent.FlatAppearance.BorderSize = 0;
+                    btnMarkPresent.Location = new Point(677, 8);
+                    btnMarkPresent.Size = new Size(85, 28);
+                    btnMarkPresent.Tag = booking;
+                    btnMarkPresent.Cursor = Cursors.Hand;
+                    btnMarkPresent.Enabled = !isMarkedPresent;
+                    btnMarkPresent.Click += (s, e) => MarkPresent(booking);
+                    rowPanel.Controls.Add(btnMarkPresent);
+                }
 
-                // Cancel Button
-                Button btnCancel = new Button();
-                btnCancel.Text = "Cancel";
-                btnCancel.Font = new Font("Segoe UI", 8, FontStyle.Bold);
-                btnCancel.ForeColor = ColorFromHex(WHITE);
-                btnCancel.BackColor = ColorFromHex(RED_DANGER);
-                btnCancel.FlatStyle = FlatStyle.Flat;
-                btnCancel.FlatAppearance.BorderSize = 0;
-                btnCancel.Location = new Point(765, 8);
-                btnCancel.Size = new Size(70, 28);
-                btnCancel.Tag = booking.Id;
-                btnCancel.Cursor = Cursors.Hand;
-                btnCancel.Click += (s, e) => CancelBooking(booking.Id);
-                rowPanel.Controls.Add(btnCancel);
+                // Cancel Button - Only for SuperAdmin and Staff
+                if (CurrentUser.IsSuperAdmin() || CurrentUser.IsStaff())
+                {
+                    Button btnCancel = new Button();
+                    btnCancel.Text = "Cancel";
+                    btnCancel.Font = new Font("Segoe UI", 8, FontStyle.Bold);
+                    btnCancel.ForeColor = ColorFromHex(WHITE);
+                    btnCancel.BackColor = ColorFromHex(RED_DANGER);
+                    btnCancel.FlatStyle = FlatStyle.Flat;
+                    btnCancel.FlatAppearance.BorderSize = 0;
+                    btnCancel.Location = new Point(765, 8);
+                    btnCancel.Size = new Size(70, 28);
+                    btnCancel.Tag = booking.Id;
+                    btnCancel.Cursor = Cursors.Hand;
+                    btnCancel.Click += (s, e) => CancelBooking(booking.Id);
+                    rowPanel.Controls.Add(btnCancel);
+                }
 
                 pnlContent.Controls.Add(rowPanel);
                 currentY += 50;

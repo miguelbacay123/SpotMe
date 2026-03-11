@@ -276,6 +276,12 @@
     <Compile Include="View\Donations.Designer.cs">
       <DependentUpon>Donations.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\PartnershipsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\PartnershipsForm.Designer.cs">
+      <DependentUpon>PartnershipsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\ManageStaffForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -374,6 +380,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\MemberManagement..resx">
       <DependentUpon>MemberManagement..cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\PartnershipsForm.resx">
+      <DependentUpon>PartnershipsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\RegisterForm.resx">
       <DependentUpon>RegisterForm.cs</DependentUpon>

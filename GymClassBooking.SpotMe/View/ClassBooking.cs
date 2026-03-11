@@ -71,10 +71,14 @@ namespace GymClassBooking.SpotMe.View
             lblHeaderTitle.ForeColor = ColorFromHex(PRIMARY_HUE);
             lblHeaderSubtitle.ForeColor = ColorFromHex(GRAY_MEDIUM);
 
-            // Add button
-            btnAddClass.NormalColor = ColorFromHex(PRIMARY_HUE);
-            btnAddClass.HoverColor = ColorFromHex(0x9B6BA6);
-            btnAddClass.ForeColor = ColorFromHex(WHITE);
+            // Add button - Only visible for SuperAdmin and Staff
+            btnAddClass.Visible = CurrentUser.IsSuperAdmin() || CurrentUser.IsStaff();
+            if (btnAddClass.Visible)
+            {
+                btnAddClass.NormalColor = ColorFromHex(PRIMARY_HUE);
+                btnAddClass.HoverColor = ColorFromHex(0x9B6BA6);
+                btnAddClass.ForeColor = ColorFromHex(WHITE);
+            }
 
             // Navigation buttons
             foreach (RoundedButton btn in new[] { Home, Members, Trainers, btnClassBooking, SessionSchedule, More })
@@ -104,7 +108,7 @@ namespace GymClassBooking.SpotMe.View
             {
                 Label lblNoClasses = new Label
                 {
-                    Text = "No classes found. Click '+ Add Class' to create one.",
+                    Text = "No classes found.",
                     Font = new Font("Segoe UI", 12, FontStyle.Italic),
                     ForeColor = ColorFromHex(GRAY_MEDIUM),
                     Location = new Point(20, 20),
@@ -266,7 +270,7 @@ namespace GymClassBooking.SpotMe.View
             cardPanel.Controls.Add(lblCapacity);
             currentY += 30;
 
-            // View Details Button
+            // View Details Button - Always show
             Button btnView = new Button();
             btnView.Text = "👁️ View Details";
             btnView.Font = new Font("Segoe UI", 9, FontStyle.Bold);
@@ -283,39 +287,45 @@ namespace GymClassBooking.SpotMe.View
             cardPanel.Controls.Add(btnView);
             currentY += 33;
 
-            // Edit Button
-            Button btnEdit = new Button();
-            btnEdit.Text = "✏️ Edit";
-            btnEdit.Font = new Font("Segoe UI", 9, FontStyle.Bold);
-            btnEdit.ForeColor = ColorFromHex(PRIMARY_HUE);
-            btnEdit.BackColor = ColorFromHex(WHITE);
-            btnEdit.FlatStyle = FlatStyle.Flat;
-            btnEdit.FlatAppearance.BorderColor = ColorFromHex(PRIMARY_HUE);
-            btnEdit.FlatAppearance.BorderSize = 1;
-            btnEdit.Location = new Point(leftMargin, currentY);
-            btnEdit.Size = new Size((contentWidth - 5) / 2, 28);
-            btnEdit.Tag = cls;
-            btnEdit.Cursor = Cursors.Hand;
-            btnEdit.Click += BtnEdit_Click;
-            cardPanel.Controls.Add(btnEdit);
+            // Edit and Delete buttons - Only for SuperAdmin and Staff
+            if (CurrentUser.IsSuperAdmin() || CurrentUser.IsStaff())
+            {
+                // Edit Button
+                Button btnEdit = new Button();
+                btnEdit.Text = "✏️ Edit";
+                btnEdit.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                btnEdit.ForeColor = ColorFromHex(PRIMARY_HUE);
+                btnEdit.BackColor = ColorFromHex(WHITE);
+                btnEdit.FlatStyle = FlatStyle.Flat;
+                btnEdit.FlatAppearance.BorderColor = ColorFromHex(PRIMARY_HUE);
+                btnEdit.FlatAppearance.BorderSize = 1;
+                btnEdit.Location = new Point(leftMargin, currentY);
+                btnEdit.Size = new Size((contentWidth - 5) / 2, 28);
+                btnEdit.Tag = cls;
+                btnEdit.Cursor = Cursors.Hand;
+                btnEdit.Click += BtnEdit_Click;
+                cardPanel.Controls.Add(btnEdit);
 
-            // Delete Button
-            Button btnDelete = new Button();
-            btnDelete.Text = "🗑️ Delete";
-            btnDelete.Font = new Font("Segoe UI", 9, FontStyle.Bold);
-            btnDelete.ForeColor = ColorFromHex(RED_DELETE);
-            btnDelete.BackColor = ColorFromHex(WHITE);
-            btnDelete.FlatStyle = FlatStyle.Flat;
-            btnDelete.FlatAppearance.BorderColor = ColorFromHex(RED_DELETE);
-            btnDelete.FlatAppearance.BorderSize = 1;
-            btnDelete.Location = new Point(leftMargin + (contentWidth - 5) / 2 + 5, currentY);
-            btnDelete.Size = new Size((contentWidth - 5) / 2, 28);
-            btnDelete.Tag = cls;
-            btnDelete.Cursor = Cursors.Hand;
-            btnDelete.Click += BtnDelete_Click;
-            cardPanel.Controls.Add(btnDelete);
+                // Delete Button
+                Button btnDelete = new Button();
+                btnDelete.Text = "🗑️ Delete";
+                btnDelete.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                btnDelete.ForeColor = ColorFromHex(RED_DELETE);
+                btnDelete.BackColor = ColorFromHex(WHITE);
+                btnDelete.FlatStyle = FlatStyle.Flat;
+                btnDelete.FlatAppearance.BorderColor = ColorFromHex(RED_DELETE);
+                btnDelete.FlatAppearance.BorderSize = 1;
+                btnDelete.Location = new Point(leftMargin + (contentWidth - 5) / 2 + 5, currentY);
+                btnDelete.Size = new Size((contentWidth - 5) / 2, 28);
+                btnDelete.Tag = cls;
+                btnDelete.Cursor = Cursors.Hand;
+                btnDelete.Click += BtnDelete_Click;
+                cardPanel.Controls.Add(btnDelete);
 
-            cardPanel.Size = new Size(width, currentY + 28 + 15);
+                currentY += 28;
+            }
+
+            cardPanel.Size = new Size(width, currentY + 15);
 
             return cardPanel;
         }
@@ -497,7 +507,7 @@ namespace GymClassBooking.SpotMe.View
                 moreMenu.Items.Add("Donations");
                 moreMenu.Items.Add("Partnerships");
 
-                if (LoginForm.LoggedInUserRole == "SuperAdmin")
+                if (CurrentUser.IsSuperAdmin())
                 {
                     moreMenu.Items.Add("Manage Staff");
                 }
@@ -541,13 +551,21 @@ namespace GymClassBooking.SpotMe.View
                             break;
 
                         case "Partnerships":
-                            MessageBox.Show("Partnerships form coming soon!",
-                                "Partnerships", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            PartnershipsForm partnershipsForm = new PartnershipsForm();
+                            partnershipsForm.ShowDialog();
                             break;
 
                         case "Manage Staff":
-                            ManageStaffForm staffForm = new ManageStaffForm();
-                            staffForm.ShowDialog();
+                            if (CurrentUser.IsSuperAdmin())
+                            {
+                                ManageStaffForm staffForm = new ManageStaffForm();
+                                staffForm.ShowDialog();
+                            }
+                            else
+                            {
+                                MessageBox.Show("You don't have permission to access this feature.",
+                                    "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
                             break;
 
                         case "Logout":
@@ -556,6 +574,7 @@ namespace GymClassBooking.SpotMe.View
 
                             if (result == DialogResult.Yes)
                             {
+                                CurrentUser.Logout();
                                 this.Close();
                             }
                             break;

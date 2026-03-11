@@ -273,22 +273,25 @@ namespace GymClassBooking.SpotMe.View
             cardPanel.Controls.Add(lblCapacity);
             currentY += 30;
 
-            // View Members Button
-            Button btnViewMembers = new Button();
-            btnViewMembers.Text = "👥 View Members";
-            btnViewMembers.Font = new Font("Segoe UI", 9, FontStyle.Bold);
-            btnViewMembers.ForeColor = ColorFromHex(PRIMARY_HUE);
-            btnViewMembers.BackColor = ColorFromHex(WHITE);
-            btnViewMembers.FlatStyle = FlatStyle.Flat;
-            btnViewMembers.FlatAppearance.BorderColor = ColorFromHex(PRIMARY_HUE);
-            btnViewMembers.FlatAppearance.BorderSize = 1;
-            btnViewMembers.Location = new Point(leftMargin, currentY);
-            btnViewMembers.Size = new Size(contentWidth, 28);
-            btnViewMembers.Tag = session;
-            btnViewMembers.Cursor = Cursors.Hand;
-            btnViewMembers.Click += BtnViewMembers_Click;
-            cardPanel.Controls.Add(btnViewMembers);
-            currentY += 33;
+            // View Members Button - Only for SuperAdmin and Staff
+            if (CurrentUser.IsSuperAdmin() || CurrentUser.IsStaff())
+            {
+                Button btnViewMembers = new Button();
+                btnViewMembers.Text = "👥 View Members";
+                btnViewMembers.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                btnViewMembers.ForeColor = ColorFromHex(PRIMARY_HUE);
+                btnViewMembers.BackColor = ColorFromHex(WHITE);
+                btnViewMembers.FlatStyle = FlatStyle.Flat;
+                btnViewMembers.FlatAppearance.BorderColor = ColorFromHex(PRIMARY_HUE);
+                btnViewMembers.FlatAppearance.BorderSize = 1;
+                btnViewMembers.Location = new Point(leftMargin, currentY);
+                btnViewMembers.Size = new Size(contentWidth, 28);
+                btnViewMembers.Tag = session;
+                btnViewMembers.Cursor = Cursors.Hand;
+                btnViewMembers.Click += BtnViewMembers_Click;
+                cardPanel.Controls.Add(btnViewMembers);
+                currentY += 33;
+            }
 
             cardPanel.Size = new Size(width, currentY + 15);
 
@@ -367,7 +370,7 @@ namespace GymClassBooking.SpotMe.View
                 moreMenu.Items.Add("Donations");
                 moreMenu.Items.Add("Partnerships");
 
-                if (LoginForm.LoggedInUserRole == "SuperAdmin")
+                if (CurrentUser.IsSuperAdmin())
                 {
                     moreMenu.Items.Add("Manage Staff");
                 }
@@ -411,13 +414,21 @@ namespace GymClassBooking.SpotMe.View
                             break;
 
                         case "Partnerships":
-                            MessageBox.Show("Partnerships form coming soon!",
-                                "Partnerships", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            PartnershipsForm partnershipsForm = new PartnershipsForm();
+                            partnershipsForm.ShowDialog();
                             break;
 
                         case "Manage Staff":
-                            ManageStaffForm staffForm = new ManageStaffForm();
-                            staffForm.ShowDialog();
+                            if (CurrentUser.IsSuperAdmin())
+                            {
+                                ManageStaffForm staffForm = new ManageStaffForm();
+                                staffForm.ShowDialog();
+                            }
+                            else
+                            {
+                                MessageBox.Show("You don't have permission to access this feature.",
+                                    "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
                             break;
 
                         case "Logout":
@@ -426,6 +437,7 @@ namespace GymClassBooking.SpotMe.View
 
                             if (result == DialogResult.Yes)
                             {
+                                CurrentUser.Logout();
                                 this.Close();
                             }
                             break;
