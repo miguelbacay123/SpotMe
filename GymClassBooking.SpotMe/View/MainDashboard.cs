@@ -116,8 +116,8 @@ namespace GymClassBooking.SpotMe
                     Text = "Recent Activity",
                     Font = new Font("Segoe UI", 13F, FontStyle.Bold),
                     ForeColor = ColorFromHex(PRIMARY_HUE),
-                    Location = new Point(15, 15),
-                    Size = new Size(300, 25),
+                    Location = new Point(15, 10),
+                    Size = new Size(300, 28),
                     AutoSize = false
                 };
                 panelActivityLogs.Controls.Add(lblTitle);
@@ -127,7 +127,7 @@ namespace GymClassBooking.SpotMe
                     Text = "Latest updates",
                     Font = new Font("Segoe UI", 9F),
                     ForeColor = ColorFromHex(GRAY_MEDIUM),
-                    Location = new Point(15, 40),
+                    Location = new Point(15, 38),
                     Size = new Size(300, 20),
                     AutoSize = false
                 };

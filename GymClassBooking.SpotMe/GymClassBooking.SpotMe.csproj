@@ -189,32 +189,32 @@
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
     <Compile Include="Controllers\TrainerController.cs" />
-    <Compile Include="Controls\BulletPointLabel.cs">
+    <Compile Include="View\Controls\BulletPointLabel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\CheckBoxWithText.cs">
+    <Compile Include="View\Controls\CheckBoxWithText.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\CircularPictureBox.cs">
+    <Compile Include="View\Controls\CircularPictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\DropdownButton.cs">
+    <Compile Include="View\Controls\DropdownButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\HintLabel.cs">
+    <Compile Include="View\Controls\HintLabel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\RoundedButton.cs">
+    <Compile Include="View\Controls\RoundedButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controllers\DatabaseHelper.cs" />
-    <Compile Include="Controls\SectionHeaderLabel.cs">
+    <Compile Include="View\Controls\SectionHeaderLabel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\SeparatorLine.cs">
+    <Compile Include="View\Controls\SeparatorLine.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\SubSectionHeaderLabel.cs">
+    <Compile Include="View\Controls\SubSectionHeaderLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Data\DatabaseConnection.cs" />
@@ -360,7 +360,7 @@
     <EmbeddedResource Include="View\ClassBooking.resx">
       <DependentUpon>ClassBooking.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\RoundedButton.resx">
+    <EmbeddedResource Include="View\Controls\RoundedButton.resx">
       <DependentUpon>RoundedButton.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\CreateNewBookingForm.resx">
