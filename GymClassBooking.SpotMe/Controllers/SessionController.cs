@@ -39,13 +39,13 @@ namespace GymClassBooking.SpotMe.Controllers
                                     Category = r.GetString(1),
                                     Description = r.IsDBNull(2) ? "" : r.GetString(2),
                                     TrainerName = r.GetString(3),
-                                    TrainerId = r.GetInt32(4),
+                                    TrainerId = r.IsDBNull(4) ? 0 : r.GetInt32(4),
                                     StartTime = r.GetDateTime(5),
                                     EndTime = r.GetDateTime(6),
                                     Capacity = r.GetInt32(7),
-                                    BookedCount = r.GetInt32(8),
+                                    BookedCount = r.IsDBNull(8) ? 0 : r.GetInt32(8),
                                     Status = r.IsDBNull(9) ? "Upcoming" : r.GetString(9),
-                                    IsActive = r.GetBoolean(10)
+                                    IsActive = r.IsDBNull(10) ? true : r.GetBoolean(10)
                                 };
 
                                 // Calculate current status dynamically based on current time
@@ -94,13 +94,13 @@ namespace GymClassBooking.SpotMe.Controllers
                                     Category = r.GetString(1),
                                     Description = r.IsDBNull(2) ? "" : r.GetString(2),
                                     TrainerName = r.GetString(3),
-                                    TrainerId = r.GetInt32(4),
+                                    TrainerId = r.IsDBNull(4) ? 0 : r.GetInt32(4),
                                     StartTime = r.GetDateTime(5),
                                     EndTime = r.GetDateTime(6),
                                     Capacity = r.GetInt32(7),
-                                    BookedCount = r.GetInt32(8),
+                                    BookedCount = r.IsDBNull(8) ? 0 : r.GetInt32(8),
                                     Status = r.IsDBNull(9) ? "Upcoming" : r.GetString(9),
-                                    IsActive = r.GetBoolean(10)
+                                    IsActive = r.IsDBNull(10) ? true : r.GetBoolean(10)
                                 };
 
                                 // Calculate current status dynamically

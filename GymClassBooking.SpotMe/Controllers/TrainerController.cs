@@ -330,8 +330,8 @@ namespace GymClassBooking.SpotMe.Controllers
                                     Address = reader.IsDBNull(6) ? null : reader.GetString(6),
                                     Specializations = DeserializeSpecializations(reader.IsDBNull(7) ? null : reader.GetString(7)),
                                     PhotoPath = reader.IsDBNull(8) ? null : reader.GetString(8),
-                                    HireDate = reader.GetDateTime(9),
-                                    IsActive = reader.GetBoolean(10)
+                                    HireDate = reader.IsDBNull(9) ? DateTime.Now : reader.GetDateTime(9),
+                                    IsActive = reader.IsDBNull(10) ? true : reader.GetBoolean(10)
                                 };
 
                                 if (!string.IsNullOrEmpty(trainer.PhotoPath) && File.Exists(trainer.PhotoPath))

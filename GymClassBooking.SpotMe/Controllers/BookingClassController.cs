@@ -82,14 +82,14 @@ namespace GymClassBooking.SpotMe.Controllers
                                     Id = reader.GetInt32(0),
                                     Category = reader.GetString(1),
                                     TrainerName = reader.GetString(2),
-                                    TrainerId = reader.GetInt32(3),
+                                    TrainerId = reader.IsDBNull(3) ? 0 : reader.GetInt32(3),
                                     Description = reader.IsDBNull(4) ? "" : reader.GetString(4),
                                     Capacity = reader.GetInt32(5),
-                                    BookedCount = reader.GetInt32(6),
+                                    BookedCount = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
                                     StartTime = reader.GetDateTime(7),
                                     EndTime = reader.GetDateTime(8),
-                                    Status = reader.GetString(9),
-                                    IsActive = reader.GetBoolean(10)
+                                    Status = reader.IsDBNull(9) ? "Upcoming" : reader.GetString(9),
+                                    IsActive = reader.IsDBNull(10) ? true : reader.GetBoolean(10)
                                 };
                             }
                         }
@@ -279,28 +279,28 @@ namespace GymClassBooking.SpotMe.Controllers
                     conn.Open();
                     string sql = @"SELECT Id, Category, TrainerName, TrainerId, Description, 
                                           Capacity, BookedCount, StartTime, EndTime, Status, IsActive 
-                                   FROM BookingClasses ORDER BY IsActive DESC, StartTime";
+                                                   FROM BookingClasses ORDER BY IsActive DESC, StartTime";
 
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                classes.Add(new BookingClass
-                                {
-                                    Id = reader.GetInt32(0),
-                                    Category = reader.GetString(1),
-                                    TrainerName = reader.GetString(2),
-                                    TrainerId = reader.GetInt32(3),
-                                    Description = reader.IsDBNull(4) ? "" : reader.GetString(4),
-                                    Capacity = reader.GetInt32(5),
-                                    BookedCount = reader.GetInt32(6),
-                                    StartTime = reader.GetDateTime(7),
-                                    EndTime = reader.GetDateTime(8),
-                                    Status = reader.GetString(9),
-                                    IsActive = reader.GetBoolean(10)
-                                });
+                                   using (SqlCommand cmd = new SqlCommand(sql, conn))
+                                   {
+                                       using (SqlDataReader reader = cmd.ExecuteReader())
+                                       {
+                                           while (reader.Read())
+                                           {
+                                               classes.Add(new BookingClass
+                                               {
+                                                   Id = reader.GetInt32(0),
+                                                   Category = reader.GetString(1),
+                                                   TrainerName = reader.GetString(2),
+                                                   TrainerId = reader.IsDBNull(3) ? 0 : reader.GetInt32(3),
+                                                   Description = reader.IsDBNull(4) ? "" : reader.GetString(4),
+                                                   Capacity = reader.GetInt32(5),
+                                                   BookedCount = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
+                                                   StartTime = reader.GetDateTime(7),
+                                                   EndTime = reader.GetDateTime(8),
+                                                   Status = reader.IsDBNull(9) ? "Upcoming" : reader.GetString(9),
+                                                   IsActive = reader.IsDBNull(10) ? true : reader.GetBoolean(10)
+                                               });
                             }
                         }
                     }

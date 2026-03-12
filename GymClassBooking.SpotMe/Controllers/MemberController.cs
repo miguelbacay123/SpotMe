@@ -144,8 +144,8 @@ namespace GymClassBooking.SpotMe.Controllers
                                     Gender = reader.IsDBNull(4) ? null : reader.GetString(4),
                                     FitnessGoal = reader.IsDBNull(5) ? null : reader.GetString(5),
                                     PhotoPath = reader.IsDBNull(6) ? null : reader.GetString(6),
-                                    DateJoined = reader.GetDateTime(7),
-                                    IsActive = reader.GetBoolean(8)
+                                    DateJoined = reader.IsDBNull(7) ? DateTime.Now : reader.GetDateTime(7),
+                                    IsActive = reader.IsDBNull(8) ? true : reader.GetBoolean(8)
                                 };
 
                                 if (!string.IsNullOrEmpty(member.PhotoPath) && File.Exists(member.PhotoPath))
@@ -390,8 +390,8 @@ namespace GymClassBooking.SpotMe.Controllers
                                     Gender = reader.IsDBNull(4) ? null : reader.GetString(4),
                                     FitnessGoal = reader.IsDBNull(5) ? null : reader.GetString(5),
                                     PhotoPath = reader.IsDBNull(6) ? null : reader.GetString(6),
-                                    DateJoined = reader.GetDateTime(7),
-                                    IsActive = reader.GetBoolean(8)
+                                    DateJoined = reader.IsDBNull(7) ? DateTime.Now : reader.GetDateTime(7),
+                                    IsActive = reader.IsDBNull(8) ? true : reader.GetBoolean(8)
                                 };
 
                                 if (!string.IsNullOrEmpty(member.PhotoPath) && File.Exists(member.PhotoPath))
@@ -446,8 +446,8 @@ namespace GymClassBooking.SpotMe.Controllers
                                     Gender = reader.IsDBNull(4) ? null : reader.GetString(4),
                                     FitnessGoal = reader.IsDBNull(5) ? null : reader.GetString(5),
                                     PhotoPath = reader.IsDBNull(6) ? null : reader.GetString(6),
-                                    DateJoined = reader.GetDateTime(7),
-                                    IsActive = reader.GetBoolean(8)
+                                    DateJoined = reader.IsDBNull(7) ? DateTime.Now : reader.GetDateTime(7),
+                                    IsActive = reader.IsDBNull(8) ? true : reader.GetBoolean(8)
                                 };
 
                                 if (!string.IsNullOrEmpty(member.PhotoPath) && File.Exists(member.PhotoPath))
