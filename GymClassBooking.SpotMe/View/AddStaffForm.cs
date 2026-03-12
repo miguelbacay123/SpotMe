@@ -154,12 +154,25 @@ namespace GymClassBooking.SpotMe.View
                         return;
                     }
 
-                    // First, create staff in Staff table
+                    // First, register in Users table (login system) to get the UserId
+                    DatabaseHelper.RegisterUser(email, txtPassword.Text);
+
+                    // Get the UserId from Users table
+                    int userId = DatabaseHelper.GetUserIdByEmail(email);
+                    if (userId == 0)
+                    {
+                        MessageBox.Show("Failed to create user account. Please try again.", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // Then, create staff in Staff table with the UserId
                     Staff newStaff = new Staff
                     {
                         Username = txtUsername.Text.Trim(),
                         Email = email,
-                        Password = txtPassword.Text
+                        Password = txtPassword.Text,
+                        UserId = userId
                     };
 
                     if (!_staffController.AddStaff(newStaff))
@@ -167,14 +180,6 @@ namespace GymClassBooking.SpotMe.View
                         MessageBox.Show("Failed to add staff. Please try again.", "Error",
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
-                    }
-
-                    // Then, register in Users table (login system)
-                    // This is secondary - if it fails, staff still exists in Staff table
-                    if (!DatabaseHelper.RegisterUser(email, txtPassword.Text))
-                    {
-                        // Email already in Users table - that's OK, just update password
-                        DatabaseHelper.UpdateUserPassword(email, txtPassword.Text);
                     }
 
                     StaffUsername = newStaff.Username;

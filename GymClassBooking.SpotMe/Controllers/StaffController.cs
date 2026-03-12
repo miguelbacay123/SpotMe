@@ -18,13 +18,14 @@ namespace GymClassBooking.SpotMe.Controllers
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "INSERT INTO [dbo].[Staff] (Username, Email, Password, IsActive) VALUES (@Username, @Email, @Password, 1)";
+                    string sql = "INSERT INTO [dbo].[Staff] (Username, Email, Password, IsActive, UserId) VALUES (@Username, @Email, @Password, 1, @UserId)";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@Username", staff.Username);
                         cmd.Parameters.AddWithValue("@Email", staff.Email);
                         cmd.Parameters.AddWithValue("@Password", staff.Password);
+                        cmd.Parameters.AddWithValue("@UserId", staff.UserId);
 
                         return cmd.ExecuteNonQuery() > 0;
                     }

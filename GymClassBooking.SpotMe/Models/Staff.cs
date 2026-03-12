@@ -10,5 +10,6 @@ namespace GymClassBooking.SpotMe.Models
         public string Password { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; }
+        public int UserId { get; set; }
     }
 }

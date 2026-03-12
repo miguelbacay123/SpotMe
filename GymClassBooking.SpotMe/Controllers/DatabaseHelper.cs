@@ -54,6 +54,27 @@ namespace GymClassBooking.SpotMe.Controllers
             }
         }
 
+        public static int GetUserIdByEmail(string email)
+        {
+            try
+            {
+                using (SqlConnection conn = GetConnection())
+                {
+                    conn.Open();
+                    string sql = "SELECT Id FROM Users WHERE Email = @Email";
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Email", email);
+                        object result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                            return (int)result;
+                    }
+                }
+            }
+            catch { }
+            return 0;
+        }
+
         public static bool LoginUser(string email, string password)
         {
             try
