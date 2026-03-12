@@ -429,6 +429,31 @@ namespace GymClassBooking.SpotMe.View
             AddBookingClassForm addForm = new AddBookingClassForm();
             if (addForm.ShowDialog() == DialogResult.OK)
             {
+                // Get the current user's Staff Id
+                var staffController = new Controllers.StaffController();
+                var staff = staffController.GetStaffByEmail(CurrentUser.UserEmail);
+
+                if (staff == null && CurrentUser.IsSuperAdmin())
+                {
+                    // Auto-create a Staff record for SuperAdmin
+                    int userId = Controllers.DatabaseHelper.GetUserIdByEmail(CurrentUser.UserEmail);
+                    staffController.AddStaff(new Models.Staff
+                    {
+                        Username = CurrentUser.UserEmail,
+                        Email = CurrentUser.UserEmail,
+                        Password = "",
+                        UserId = userId > 0 ? userId : 1
+                    });
+                    staff = staffController.GetStaffByEmail(CurrentUser.UserEmail);
+                }
+
+                if (staff == null)
+                {
+                    MessageBox.Show("Could not determine staff account. Please log in again.",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 BookingClass newClass = new BookingClass
                 {
                     Category = addForm.ClassCategory,
@@ -440,7 +465,8 @@ namespace GymClassBooking.SpotMe.View
                     EndTime = addForm.EndTime,
                     Status = "Upcoming",
                     BookedCount = 0,
-                    IsActive = true
+                    IsActive = true,
+                    StaffId = staff.Id
                 };
 
                 classController.AddClass(newClass);

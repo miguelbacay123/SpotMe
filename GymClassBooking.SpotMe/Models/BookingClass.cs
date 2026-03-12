@@ -15,6 +15,7 @@ namespace GymClassBooking.SpotMe.Models
         public DateTime EndTime { get; set; }
         public string Status { get; set; } // Upcoming, Ongoing, Completed, Cancelled
         public bool IsActive { get; set; }
+        public int StaffId { get; set; }
 
         // Helper properties
         public int AvailableSpots => Capacity - BookedCount;

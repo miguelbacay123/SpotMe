@@ -15,5 +15,6 @@ namespace GymClassBooking.SpotMe.Models
         public string PhotoPath { get; set; }      // For database storage
         public DateTime DateJoined { get; set; }
         public bool IsActive { get; set; }
+        public int UserId { get; set; }
     }
 }

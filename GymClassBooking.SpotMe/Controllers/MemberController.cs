@@ -192,8 +192,8 @@ namespace GymClassBooking.SpotMe.Controllers
                 using (SqlConnection conn = DatabaseHelper.GetConnection())
                 {
                     conn.Open();
-                    string sql = @"INSERT INTO Members (Name, Email, Phone, Gender, FitnessGoal, PhotoPath, DateJoined, IsActive) 
-                                   VALUES (@Name, @Email, @Phone, @Gender, @FitnessGoal, @PhotoPath, @DateJoined, @IsActive)";
+                    string sql = @"INSERT INTO Members (Name, Email, Phone, Gender, FitnessGoal, PhotoPath, DateJoined, IsActive, UserId) 
+                                   VALUES (@Name, @Email, @Phone, @Gender, @FitnessGoal, @PhotoPath, @DateJoined, @IsActive, @UserId)";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
@@ -205,6 +205,7 @@ namespace GymClassBooking.SpotMe.Controllers
                         cmd.Parameters.AddWithValue("@PhotoPath", (object)member.PhotoPath ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@DateJoined", DateTime.Now);
                         cmd.Parameters.AddWithValue("@IsActive", true);
+                        cmd.Parameters.AddWithValue("@UserId", member.UserId);
 
                         cmd.ExecuteNonQuery();
                     }

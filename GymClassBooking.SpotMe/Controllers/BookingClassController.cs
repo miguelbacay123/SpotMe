@@ -112,9 +112,9 @@ namespace GymClassBooking.SpotMe.Controllers
                 {
                     conn.Open();
                     string sql = @"INSERT INTO BookingClasses (Category, TrainerName, TrainerId, Description, 
-                                   Capacity, BookedCount, StartTime, EndTime, Status, IsActive) 
+                                   Capacity, BookedCount, StartTime, EndTime, Status, IsActive, StaffId) 
                                    VALUES (@Category, @TrainerName, @TrainerId, @Description, 
-                                   @Capacity, @BookedCount, @StartTime, @EndTime, @Status, @IsActive)";
+                                   @Capacity, @BookedCount, @StartTime, @EndTime, @Status, @IsActive, @StaffId)";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
@@ -128,6 +128,7 @@ namespace GymClassBooking.SpotMe.Controllers
                         cmd.Parameters.AddWithValue("@EndTime", bookingClass.EndTime);
                         cmd.Parameters.AddWithValue("@Status", "Upcoming");
                         cmd.Parameters.AddWithValue("@IsActive", true);
+                        cmd.Parameters.AddWithValue("@StaffId", bookingClass.StaffId);
 
                         cmd.ExecuteNonQuery();
                     }

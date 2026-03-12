@@ -412,6 +412,10 @@ namespace GymClassBooking.SpotMe.View
             AddMemberForm addForm = new AddMemberForm();
             if (addForm.ShowDialog() == DialogResult.OK)
             {
+                // Get or create a Users record for the member
+                DatabaseHelper.RegisterUser(addForm.MemberEmail, "");
+                int userId = DatabaseHelper.GetUserIdByEmail(addForm.MemberEmail);
+
                 memberController.AddMember(new Member
                 {
                     Name = addForm.MemberName,
@@ -421,7 +425,8 @@ namespace GymClassBooking.SpotMe.View
                     FitnessGoal = addForm.MemberFitnessGoal,
                     Photo = addForm.MemberPhoto,
                     PhotoPath = addForm.MemberPhotoPath,
-                    IsActive = true
+                    IsActive = true,
+                    UserId = userId
                 });
                 LoadMembers();
                 RefreshMainDashboard();

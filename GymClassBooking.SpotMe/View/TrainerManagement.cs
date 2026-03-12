@@ -399,6 +399,10 @@ namespace GymClassBooking.SpotMe.View
             AddTrainerForm addForm = new AddTrainerForm();
             if (addForm.ShowDialog() == DialogResult.OK)
             {
+                // Get or create a Users record for the trainer
+                DatabaseHelper.RegisterUser(addForm.TrainerEmail, "");
+                int userId = DatabaseHelper.GetUserIdByEmail(addForm.TrainerEmail);
+
                 trainerController.AddTrainer(new Trainer
                 {
                     Name = addForm.TrainerName,
@@ -409,7 +413,8 @@ namespace GymClassBooking.SpotMe.View
                     Address = addForm.TrainerAddress,
                     Specializations = addForm.TrainerSpecializations,
                     Photo = addForm.TrainerPhoto,
-                    PhotoPath = addForm.TrainerPhotoPath
+                    PhotoPath = addForm.TrainerPhotoPath,
+                    UserId = userId
                 });
                 LoadTrainers();
                 RefreshMainDashboard();

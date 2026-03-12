@@ -319,7 +319,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "RegisterForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.Text = "Form1";
+            this.Text = "SpotMe - Register";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);
