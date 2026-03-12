@@ -13,6 +13,7 @@ namespace GymClassBooking.SpotMe.View
         private Session _session;
         private SessionController _sessionController = new SessionController();
         private AttendanceController _attendanceController = new AttendanceController();
+        private ActivityLogController _activityLogController = new ActivityLogController();
         private List<SessionBooking> _bookings = new List<SessionBooking>();
 
         // Color Palette
@@ -226,6 +227,14 @@ namespace GymClassBooking.SpotMe.View
 
                 _attendanceController.AddAttendance(attendance);
 
+                _activityLogController.AddActivityLog(new ActivityLog
+                {
+                    Action = "Attendance Marked",
+                    Description = $"{booking.MemberName} marked present for {_session.Category}",
+                    Category = "Attendance",
+                    Icon = "✓"
+                });
+
                 MessageBox.Show($"{booking.MemberName} marked as present!", "Success",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -265,6 +274,15 @@ namespace GymClassBooking.SpotMe.View
                 try
                 {
                     _sessionController.CancelBooking(bookingId, _session.Id);
+
+                    _activityLogController.AddActivityLog(new ActivityLog
+                    {
+                        Action = "Booking Cancelled",
+                        Description = $"Booking cancelled for {_session.Category} session",
+                        Category = "Attendance",
+                        Icon = "✗"
+                    });
+
                     MessageBox.Show("Booking cancelled successfully!", "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadBookings();

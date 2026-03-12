@@ -206,6 +206,13 @@ namespace GymClassBooking.SpotMe.View
                 return;
             }
 
+            // Set TrainerId from the selected trainer
+            int selectedTrainerIndex = cboTrainer.SelectedIndex - 1; // -1 for "Select Trainer" placeholder
+            if (selectedTrainerIndex >= 0 && selectedTrainerIndex < _trainers.Count)
+            {
+                this.TrainerId = _trainers[selectedTrainerIndex].Id;
+            }
+
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

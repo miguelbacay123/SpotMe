@@ -120,7 +120,7 @@ namespace GymClassBooking.SpotMe.Controllers
                     {
                         cmd.Parameters.AddWithValue("@Category", bookingClass.Category);
                         cmd.Parameters.AddWithValue("@TrainerName", bookingClass.TrainerName);
-                        cmd.Parameters.AddWithValue("@TrainerId", bookingClass.TrainerId);
+                        cmd.Parameters.AddWithValue("@TrainerId", bookingClass.TrainerId > 0 ? (object)bookingClass.TrainerId : DBNull.Value);
                         cmd.Parameters.AddWithValue("@Description", bookingClass.Description ?? "");
                         cmd.Parameters.AddWithValue("@Capacity", bookingClass.Capacity);
                         cmd.Parameters.AddWithValue("@BookedCount", 0);
@@ -194,7 +194,7 @@ namespace GymClassBooking.SpotMe.Controllers
                         cmd.Parameters.AddWithValue("@Id", bookingClass.Id);
                         cmd.Parameters.AddWithValue("@Category", bookingClass.Category);
                         cmd.Parameters.AddWithValue("@TrainerName", bookingClass.TrainerName);
-                        cmd.Parameters.AddWithValue("@TrainerId", bookingClass.TrainerId);
+                        cmd.Parameters.AddWithValue("@TrainerId", bookingClass.TrainerId > 0 ? (object)bookingClass.TrainerId : DBNull.Value);
                         cmd.Parameters.AddWithValue("@Description", bookingClass.Description ?? "");
                         cmd.Parameters.AddWithValue("@Capacity", bookingClass.Capacity);
                         cmd.Parameters.AddWithValue("@StartTime", bookingClass.StartTime);
